@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:task_management_app/components/task_status_container.dart';
 import 'package:task_management_app/controller/task/addTaskController.dart';
 import 'package:task_management_app/controller/task/taskAssignToMeController.dart';
+import 'package:task_management_app/screens/task_status/inprogress_task.dart';
 
 import '../constant/const.dart';
 import '../model/taskmodel.dart';
@@ -42,6 +43,8 @@ class ShowTaskStatus extends StatelessWidget {
                     break;
                   case 1:
                     // Code for index 1
+                    Get.to(() => InProgressScreen(
+                        addTaskController: Get.find<AddTaskController>()));
                     // Add your logic here for when index is 1
                     break;
                   default:

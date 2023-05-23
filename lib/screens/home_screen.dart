@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Lottie.asset('assets/images/lists.json',
-                                  height: 17.h),
+                                  height: 16.h),
                               Text(
                                 'All Tasks',
                                 style: kTextStyleBoldWhite(24.0),
@@ -146,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Lottie.asset(
                                 'assets/images/list2.json',
-                                height: 17.h,
+                                height: 16.h,
                               ),
                               Text(
                                 'Tasks Assigned To Me',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Task {
   final String title;
@@ -7,7 +8,7 @@ class Task {
   final String endDate;
   final String priority;
   final String assignedTo;
-  String? status;
+  RxString status;
 
   Task(
       {required this.title,

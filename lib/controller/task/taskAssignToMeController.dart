@@ -11,15 +11,11 @@ class TaskAssignedToMeController extends GetxController {
       endDate: '2023-05-05',
       priority: 'High',
       assignedTo: 'me',
-      status: 'to do',
+      status: 'To do'.obs,
     ),
   ].obs;
 
-
- 
- 
-
-   addTaskToAssignedToMe(Task task) {
+  addTaskToAssignedToMe(Task task) {
     taskToAssignedMe.add(task);
   }
 
@@ -27,4 +23,3 @@ class TaskAssignedToMeController extends GetxController {
     taskToAssignedMe.remove(task);
   }
 }
-
