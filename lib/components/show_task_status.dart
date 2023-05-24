@@ -7,6 +7,7 @@ import 'package:task_management_app/screens/task_status/inprogress_task.dart';
 
 import '../constant/const.dart';
 import '../model/taskmodel.dart';
+import '../screens/task_status/completed_task.dart';
 import '../screens/task_status/todo_task.dart';
 
 class ShowTaskStatus extends StatelessWidget {
@@ -36,9 +37,8 @@ class ShowTaskStatus extends StatelessWidget {
                         .toList();
                 switch (index) {
                   case 0:
-                    Get.to(() => ToDoTaskScreen(
-                          allTasks: allTasks,
-                          assignedToMeTasks: assignedTasks,
+                    Get.to(() => ToDoScreen(
+                          addTaskController: Get.find<AddTaskController>(),
                         ));
                     break;
                   case 1:
@@ -48,8 +48,8 @@ class ShowTaskStatus extends StatelessWidget {
                     // Add your logic here for when index is 1
                     break;
                   default:
-                  // Code for other cases
-                  // Add your logic here for when index is neither 0 nor 1
+                    Get.to(() => CompletedScreen(
+                        addTaskController: Get.find<AddTaskController>()));
                 }
               },
               borderRadius: BorderRadius.circular(60),
@@ -61,11 +61,5 @@ class ShowTaskStatus extends StatelessWidget {
     );
   }
 
-  // _goToTasksByStatus(TaskStatus status) {
-  //   _taskController.getTaskByStatus(status);
-  //   Get.toNamed(
-  //     MyRoutes.getTasksByStatusRoute(),
-  //     arguments: {"status": status},
-  //   );
-  // }
+ 
 }

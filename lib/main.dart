@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/controller/task/addTaskController.dart';
 import 'package:task_management_app/screens/home_screen.dart';
+import 'package:task_management_app/splash_screen.dart';
 
 import 'controller/task/taskAssignToMeController.dart';
 
@@ -27,8 +28,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      // home: SplashScreen(),
-      home: HomeScreen(),
+      home: SplashScreen(),
+      // home: HomeScreen(),
       initialBinding: BindingsBuilder(() {
         Get.lazyPut<TaskAssignedToMeController>(
             () => TaskAssignedToMeController());

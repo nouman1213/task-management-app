@@ -172,6 +172,7 @@ class AddNewTaskScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             TextField(
+              maxLines: 5,
               controller: _addTaskController.detailsController,
               decoration: InputDecoration(
                 labelText: 'Task Details',

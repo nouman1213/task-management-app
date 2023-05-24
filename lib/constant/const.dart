@@ -74,6 +74,16 @@ TextStyle kTextStyleBoldWhite(double size) {
   );
 }
 
+TextStyle kTextStyleBoldBlack2(double size) {
+  return GoogleFonts.orbitron(
+    textStyle: TextStyle(
+      fontSize: size,
+      color: Colors.grey,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+}
+
 Widget kVerticalSpace(double height) => SizedBox(height: height);
 
 const List<Color> colors = [
@@ -91,14 +101,13 @@ String showGreeting() {
   var hour = DateTime.now().hour;
   if (hour < 12) {
     return 'Good Morning';
-  } else if (hour < 18) {
+  } else if (hour < 17) {
     return 'Good Afternoon';
-  } else if (hour < 5) {
-    return 'Good Night';
-  } else if (hour > 17 && hour < 24) {
+  } else if (hour < 20 && hour >= 17) {
     return 'Good Evening';
+  } else {
+    return 'Good Night';
   }
-  return 'Good Night';
 }
 
 String formattingTimeOfDay(TimeOfDay timeOfDay) {

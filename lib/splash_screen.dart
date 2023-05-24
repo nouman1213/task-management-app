@@ -32,9 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.purple[900]!,
-              Colors.purple[600]!,
-              Colors.purple[300]!,
+              Colors.amber[100]!,
+              Colors.amber[600]!,
+              Colors.amber[500]!,
             ],
           ),
         ),
@@ -48,9 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
               FadeInUpBig(
                 child: Text(
                   'Task Management App',
-                  style: GoogleFonts.anton(
+                  style: GoogleFonts.arimaMadurai(
                     textStyle: TextStyle(
-                      color: Colors.tealAccent,
+                      color: Colors.white,
                       fontWeight: FontWeight.w300,
                       fontSize: 24.sp,
                     ),
