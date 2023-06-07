@@ -23,9 +23,9 @@ class LoginScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.amber[100]!,
-              Colors.amber[600]!,
-              Colors.amber[500]!,
+              Colors.blue[200]!,
+              Colors.blue[800]!,
+              Colors.blue[900]!,
             ],
           ),
         ),
@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                                   _controller.login();
                                 }
                               },
-                              backgroundColor: Colors.teal.shade400,
+                              backgroundColor: Colors.blue.shade900,
                               loading: _controller.loading.value,
                             )),
                         SizedBox(height: 2.h),
@@ -135,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                                 "SignUp",
                                 style: TextStyle(
                                     fontSize: 14.sp,
-                                    color: Colors.teal,
+                                    color: Colors.blue.shade900,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],

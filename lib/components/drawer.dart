@@ -6,6 +6,7 @@ import 'package:task_management_app/screens/about_screen.dart';
 import 'package:task_management_app/screens/addtask_screen.dart';
 import 'package:task_management_app/screens/home_screen.dart';
 import 'package:task_management_app/screens/auth_screen/login_screen.dart';
+import 'package:task_management_app/screens/home_screen2.dart';
 import 'package:task_management_app/screens/setting_screen.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -44,7 +45,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.amber[300],
+        color: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -53,7 +54,7 @@ class _MyDrawerState extends State<MyDrawer> {
               child: UserAccountsDrawerHeader(
                 currentAccountPictureSize: Size.square(80),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade600,
+                  color: Colors.blue.shade600,
                 ),
                 margin: EdgeInsets.zero,
                 accountName: Text(
@@ -72,25 +73,25 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
             ),
-            ListTile(
-              onTap: () async {
-                Navigator.pop(context);
-                await Future.delayed(Duration(milliseconds: 1));
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
-              },
-              leading: Icon(
-                CupertinoIcons.home,
-                // color: Colors.white,
-              ),
-              title: Text(
-                "Home",
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                    // color: Colors.white,
-                    fontSize: 11.sp),
-              ),
-            ),
+            // ListTile(
+            //   onTap: () async {
+            //     Navigator.pop(context);
+            //     await Future.delayed(Duration(milliseconds: 1));
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => HomeScreen2()));
+            //   },
+            //   leading: Icon(
+            //     CupertinoIcons.home,
+            //     // color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     "Home",
+            //     textScaleFactor: 1.1,
+            //     style: TextStyle(
+            //         // color: Colors.white,
+            //         fontSize: 11.sp),
+            //   ),
+            // ),
             ListTile(
               onTap: () async {
                 Navigator.pop(context);

@@ -32,7 +32,14 @@ class ToDoScreen extends StatelessWidget {
                   Task task = addTaskController.toDoTasks[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: TaskTile(task: task),
+                    child: GestureDetector(
+                        onTap: () {
+                          Get.to(() => TaskDetailScreen(
+                                addTaskController: addTaskController,
+                                task: task,
+                              ));
+                        },
+                        child: TaskTile(task: task)),
                   );
                 },
               ),

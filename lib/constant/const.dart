@@ -64,6 +64,8 @@ TextStyle kTextStyleBoldAmber(double size) {
   );
 }
 
+Color mycolor = Color.fromARGB(255, 22, 34, 70);
+
 TextStyle kTextStyleBoldWhite(double size) {
   return GoogleFonts.arimaMadurai(
     textStyle: TextStyle(
@@ -85,6 +87,7 @@ TextStyle kTextStyleBoldBlack2(double size) {
 }
 
 Widget kVerticalSpace(double height) => SizedBox(height: height);
+Widget kHorizontleSpace(double width) => SizedBox(width: width);
 
 const List<Color> colors = [
   Colors.pink,

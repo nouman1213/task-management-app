@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_management_app/screens/home_screen.dart';
+
+import '../../screens/main_screen.dart';
 
 class SignUpController extends GetxController {
   RxBool obscureText = true.obs;
@@ -14,7 +14,7 @@ class SignUpController extends GetxController {
   void signup() async {
     loading.value = true;
     await Future.delayed(Duration(seconds: 3));
-    Get.offAll(() => HomeScreen());
+    Get.offAll(() => MainScreen());
     loading.value = false;
   }
 }

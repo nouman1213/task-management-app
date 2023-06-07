@@ -14,12 +14,9 @@ class _About_Screen extends State<About_Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[300],
+        // backgroundColor: Colors.amber[300],
         title: Text(
-          'A B O U T     U S',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          'About US',
         ),
       ),
 

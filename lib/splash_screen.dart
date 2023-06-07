@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 3), () {
       Get.offAll(() => LoginScreen());
     });
   }
@@ -27,37 +27,46 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.amber[100]!,
-              Colors.amber[600]!,
-              Colors.amber[500]!,
-            ],
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //     colors: [
+        //       Colors.blue[200]!,
+        //       Colors.blue[800]!,
+        //       Colors.blue[900]!,
+        //     ],
+        //   ),
+        // ),
         child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FadeInDownBig(
-                  child: Lottie.asset('assets/images/task.json', height: 40.h)),
-              FadeInUpBig(
-                child: Text(
-                  'Task Management App',
-                  style: GoogleFonts.arimaMadurai(
-                    textStyle: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 24.sp,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // FadeInDownBig(
+                //     child: Lottie.asset('assets/images/task.json', height: 40.h)),
+                FadeInDownBig(
+                    child: Image.asset(
+                  'assets/images/scarlet.png',
+                  height: 80,
+                )),
+                SizedBox(height: 20),
+                FadeInUpBig(
+                  child: Text(
+                    'Task Management App',
+                    style: GoogleFonts.abel(
+                      textStyle: TextStyle(
+                        color: Colors.red[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24.sp,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

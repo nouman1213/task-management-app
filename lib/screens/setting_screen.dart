@@ -18,16 +18,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'S E T T I N G S',
-          style: GoogleFonts.abel(
-            textStyle: TextStyle(
-                // color: Colors.white,
-                fontWeight: FontWeight.w600,
-                // height: 1.5,
-                fontSize: 16.sp),
-          ),
+          'Settings',
         ),
-        backgroundColor: Colors.amber[300],
+        // backgroundColor: Colors.amber[300],
       ),
       body: Padding(
         padding: EdgeInsets.all(1.h),

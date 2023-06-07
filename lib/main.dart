@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/controller/task/addTaskController.dart';
 import 'package:task_management_app/screens/home_screen.dart';
+import 'package:task_management_app/screens/main_screen.dart';
 import 'package:task_management_app/splash_screen.dart';
 
 import 'controller/task/taskAssignToMeController.dart';
@@ -25,11 +26,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: SplashScreen(),
-      // home: HomeScreen(),
+      // home: MainScreen(),
       initialBinding: BindingsBuilder(() {
         Get.lazyPut<TaskAssignedToMeController>(
             () => TaskAssignedToMeController());

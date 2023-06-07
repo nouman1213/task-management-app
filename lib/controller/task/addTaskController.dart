@@ -9,6 +9,14 @@ class AddTaskController extends GetxController {
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   final TextEditingController assignToController = TextEditingController();
+  _clearController() {
+    titleController.clear();
+    detailsController.clear();
+    startDateController.clear();
+    endDateController.clear();
+    assignToController.clear();
+  }
+
   final List<String> priorities = ['High', 'Medium', 'Low'];
   String selectedPriority = 'High';
 
@@ -76,6 +84,7 @@ class AddTaskController extends GetxController {
     mergeTasks();
 
     // Clear text field values...
+    _clearController();
 
     Get.back(result: newTask);
   }

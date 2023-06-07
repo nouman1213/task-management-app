@@ -1,16 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/components/tasktile.dart';
 import 'package:task_management_app/model/taskmodel.dart';
+import 'package:task_management_app/screens/taskDetails_screen.dart';
 
 import '../constant/const.dart';
+import '../controller/task/addTaskController.dart';
 import 'addtask_screen.dart';
 
 class TaskAssignedToMeScreen extends StatelessWidget {
   final List<Task> tasks;
 
   TaskAssignedToMeScreen({required this.tasks});
+  final AddTaskController _addTaskController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class TaskAssignedToMeScreen extends StatelessWidget {
         title: Text(
           'Tasks Assigned To Me',
         ),
-        backgroundColor: Colors.amber[300],
+        // backgroundColor: Colors.amber[300],
       ),
       body: tasks.isEmpty
           ? Center(
@@ -61,7 +63,10 @@ class TaskAssignedToMeScreen extends StatelessWidget {
                 final task = tasks[index];
                 return GestureDetector(
                     onTap: () {
-                      // Get.to(() => TaskDetailScreen(task: task, allTasks: [], addTaskController: null,));
+                      Get.to(() => TaskDetailScreen(
+                            task: task,
+                            addTaskController: _addTaskController,
+                          ));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

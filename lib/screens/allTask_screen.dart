@@ -14,7 +14,7 @@ class AllTasksScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: Text('All Tasks'),
-        backgroundColor: Colors.amber[300],
+        // backgroundColor: Colors.amber[300],
       ),
       body: Obx(() {
         final _controller = Get.find<AddTaskController>();
