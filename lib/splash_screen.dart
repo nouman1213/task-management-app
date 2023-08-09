@@ -2,9 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:task_management_app/screens/auth_screen/login_screen.dart';
+import 'package:task_management_app/screens/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(Duration(seconds: 3), () {
-      Get.offAll(() => LoginScreen());
+      Get.offAll(() => MainScreen());
     });
   }
 

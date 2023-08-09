@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import '../../model/priority_list_model.dart';
 
 class PriorityContoller extends GetxController {
+  String selectedPriority = 'Select Priority';
+  int selectedPriorityId = -1;
   RxList<GetPriorityList> priorityList = <GetPriorityList>[].obs;
   RxBool isInsertingPriority = false.obs;
   TextEditingController insertPriorityController = TextEditingController();

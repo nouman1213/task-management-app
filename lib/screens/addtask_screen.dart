@@ -5,11 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../components/roundbutton.dart';
+import '../controller/menu_controller/priority_contoller.dart';
 import '../controller/task/addTaskController.dart';
 import 'package:getwidget/getwidget.dart';
 
 class AddNewTaskScreen extends StatelessWidget {
   final AddTaskController _addTaskController = Get.put(AddTaskController());
+  final priorityContoller = Get.put(PriorityContoller());
+
 // Date picker function
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -195,16 +198,31 @@ class AddNewTaskScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              DropdownButtonFormField(
-                value: _addTaskController.selectedPriority,
-                items: _addTaskController.priorities.map((priority) {
-                  return DropdownMenuItem(
-                    value: priority,
-                    child: Text(priority),
-                  );
-                }).toList(),
+              DropdownButtonFormField<int>(
+                validator: (v) {
+                  if (v == null || v == -1) {
+                    return 'Select priority';
+                  } else {
+                    return null;
+                  }
+                },
+                value: priorityContoller.selectedPriorityId,
+                items: [
+                  DropdownMenuItem<int>(
+                    value: -1, // -1 to represent "Please select priority"
+                    child: Text(priorityContoller.selectedPriority),
+                  ),
+                  ...priorityContoller.priorityList.map((priority) {
+                    return DropdownMenuItem<int>(
+                      value: priority.pRTID!,
+                      child: Text(priority.pRTNAME ?? ''),
+                    );
+                  }).toList(),
+                ],
                 onChanged: (value) {
-                  _addTaskController.selectedPriority = value.toString();
+                  priorityContoller.selectedPriorityId = value!;
+                  print(
+                      " dropdownValue::::::${priorityContoller.selectedPriorityId = value!}");
                 },
                 decoration: InputDecoration(
                   labelText: 'Priority',
