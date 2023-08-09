@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/components/roundbutton.dart';
-import 'package:task_management_app/controller/auth/loin_controller.dart';
+import 'package:task_management_app/controller/auth/login_controller.dart';
 import 'package:task_management_app/screens/auth_screen/registeration_scree.dart';
 import '../../components/textfield.dart';
 

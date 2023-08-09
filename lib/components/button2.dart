@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../constant/const.dart';
 
-
 class CustomButton extends StatelessWidget {
   const CustomButton(
       {Key? key, this.onTap, required this.label, this.iconData, this.color})
@@ -29,7 +28,7 @@ class CustomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (iconData == null) Container() else Icon(iconData),
-            Text(label, style: kTextStyleBoldBlack(18))
+            Text(label, style: kTextStyleBoldBlack(16))
           ],
         ),
       ),

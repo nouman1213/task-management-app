@@ -23,13 +23,7 @@ class TaskDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(
-          'Task Details',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16.sp,
-          ),
-        ),
+        title: Text('Task Details', style: kTextStyleBoldWhite(18)),
         // backgroundColor: Colors.amber[300],
       ),
       body: SingleChildScrollView(
@@ -108,26 +102,12 @@ class TaskDetailScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
             kVerticalSpace(50),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    label: 'Change Status',
-                    color: Colors.green.withOpacity(0.3),
-                    onTap: () {
-                      showChangeStatusDialog(task, addTaskController);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: CustomButton(
-                    label: 'Delete',
-                    color: Colors.red.withOpacity(0.3),
-                    onTap: deleteTask,
-                  ),
-                ),
-              ],
+            CustomButton(
+              label: 'Change Status',
+              color: Colors.green.withOpacity(0.3),
+              onTap: () {
+                showChangeStatusDialog(task, addTaskController);
+              },
             ),
           ],
         ),

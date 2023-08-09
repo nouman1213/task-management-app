@@ -4,10 +4,11 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/screens/about_screen.dart';
 import 'package:task_management_app/screens/addtask_screen.dart';
-import 'package:task_management_app/screens/home_screen.dart';
 import 'package:task_management_app/screens/auth_screen/login_screen.dart';
-import 'package:task_management_app/screens/home_screen2.dart';
+import 'package:task_management_app/screens/menu_screens/change_task_status.dart';
 import 'package:task_management_app/screens/setting_screen.dart';
+
+import '../screens/menu_screens/change_priorty.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -73,25 +74,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
             ),
-            // ListTile(
-            //   onTap: () async {
-            //     Navigator.pop(context);
-            //     await Future.delayed(Duration(milliseconds: 1));
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => HomeScreen2()));
-            //   },
-            //   leading: Icon(
-            //     CupertinoIcons.home,
-            //     // color: Colors.white,
-            //   ),
-            //   title: Text(
-            //     "Home",
-            //     textScaleFactor: 1.1,
-            //     style: TextStyle(
-            //         // color: Colors.white,
-            //         fontSize: 11.sp),
-            //   ),
-            // ),
             ListTile(
               onTap: () async {
                 Navigator.pop(context);
@@ -107,6 +89,48 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               title: Text(
                 "New Task",
+                textScaleFactor: 1.1,
+                style: TextStyle(
+
+                    // color: Colors.white,
+                    fontSize: 11.sp),
+              ),
+            ),
+            ListTile(
+              onTap: () async {
+                Navigator.pop(context);
+                await Future.delayed(Duration(milliseconds: 1));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PirorityScreen()));
+              },
+              leading: Icon(
+                CupertinoIcons.book,
+                // color: Colors.white,
+              ),
+              title: Text(
+                "Change Pirority",
+                textScaleFactor: 1.1,
+                style: TextStyle(
+
+                    // color: Colors.white,
+                    fontSize: 11.sp),
+              ),
+            ),
+            ListTile(
+              onTap: () async {
+                Navigator.pop(context);
+                await Future.delayed(Duration(milliseconds: 1));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TaskStatusScreen()));
+              },
+              leading: Icon(
+                CupertinoIcons.book_fill,
+                // color: Colors.white,
+              ),
+              title: Text(
+                "Change Task Status",
                 textScaleFactor: 1.1,
                 style: TextStyle(
 

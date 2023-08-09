@@ -23,7 +23,7 @@ class RoundButton extends StatelessWidget {
       this.loading = false,
       required this.title,
       required this.onTap,
-      this.textFontSize = 18.0,
+      this.textFontSize = 16.0,
       this.height = 45,
       this.width = 300});
 
@@ -54,7 +54,7 @@ class RoundButton extends StatelessWidget {
                 style: GoogleFonts.poppins(
                     fontSize: textFontSize,
                     color: textColor,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w500),
               )),
       ),
     );
