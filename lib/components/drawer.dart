@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/screens/about_screen.dart';
 import 'package:task_management_app/screens/addtask_screen.dart';
 import 'package:task_management_app/screens/auth_screen/login_screen.dart';
-import 'package:task_management_app/screens/menu_screens/change_task_status.dart';
+import 'package:task_management_app/screens/menu_screens/task_status.dart';
 import 'package:task_management_app/screens/setting_screen.dart';
 
-import '../screens/menu_screens/change_priorty.dart';
+import '../screens/menu_screens/task_priority.dart';
+import '../screens/menu_screens/user_list.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -16,7 +18,10 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  // Inside your logout method
+  final _box = GetStorage();
+  var fkroll = '';
+  var email = '';
+
   void logout() {
     Get.dialog(
       AlertDialog(
@@ -32,6 +37,12 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           TextButton(
             onPressed: () {
+              _box.remove("usid");
+              _box.remove("loginId");
+              _box.remove("uspass");
+              _box.remove("fkRoll");
+              _box.remove("fkCoid");
+
               Get.offAll(() => LoginScreen());
               Get.back();
             },
@@ -40,6 +51,13 @@ class _MyDrawerState extends State<MyDrawer> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fkroll = _box.read("fkRoll");
+    email = _box.read("loginId");
   }
 
   @override
@@ -59,11 +77,11 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 margin: EdgeInsets.zero,
                 accountName: Text(
-                  "Admin",
+                  fkroll,
                   style: TextStyle(fontSize: 10.sp),
                 ),
                 accountEmail: Text(
-                  "admin@gmail.com",
+                  email,
                   style: TextStyle(fontSize: 10.sp),
                 ),
                 // currentAccountPicture: Image.network(imageUrl),
@@ -96,48 +114,103 @@ class _MyDrawerState extends State<MyDrawer> {
                     fontSize: 11.sp),
               ),
             ),
-            ListTile(
-              onTap: () async {
-                Navigator.pop(context);
-                await Future.delayed(Duration(milliseconds: 1));
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PirorityScreen()));
-              },
-              leading: Icon(
-                CupertinoIcons.book,
-                // color: Colors.white,
-              ),
-              title: Text(
-                "Change Pirority",
-                textScaleFactor: 1.1,
-                style: TextStyle(
+            Visibility(
+              visible: fkroll == "Admin",
+              child: ListTile(
+                onTap: () async {
+                  Navigator.pop(context);
+                  await Future.delayed(Duration(milliseconds: 1));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TaskPriorityScreen()));
+                },
+                leading: Icon(
+                  CupertinoIcons.book,
+                  // color: Colors.white,
+                ),
+                title: Text(
+                  "Task Pirority",
+                  textScaleFactor: 1.1,
+                  style: TextStyle(
 
-                    // color: Colors.white,
-                    fontSize: 11.sp),
+                      // color: Colors.white,
+                      fontSize: 11.sp),
+                ),
               ),
             ),
-            ListTile(
-              onTap: () async {
-                Navigator.pop(context);
-                await Future.delayed(Duration(milliseconds: 1));
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TaskStatusScreen()));
-              },
-              leading: Icon(
-                CupertinoIcons.book_fill,
-                // color: Colors.white,
-              ),
-              title: Text(
-                "Change Task Status",
-                textScaleFactor: 1.1,
-                style: TextStyle(
+            Visibility(
+              visible: fkroll == 'Admin',
+              child: ListTile(
+                onTap: () async {
+                  Navigator.pop(context);
+                  await Future.delayed(Duration(milliseconds: 1));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TaskStatusScreen()));
+                },
+                leading: Icon(
+                  CupertinoIcons.book_fill,
+                  // color: Colors.white,
+                ),
+                title: Text(
+                  "Task Status",
+                  textScaleFactor: 1.1,
+                  style: TextStyle(
 
-                    // color: Colors.white,
-                    fontSize: 11.sp),
+                      // color: Colors.white,
+                      fontSize: 11.sp),
+                ),
               ),
             ),
+            Visibility(
+              visible: fkroll == 'Admin',
+              child: ListTile(
+                onTap: () async {
+                  Navigator.pop(context);
+                  await Future.delayed(Duration(milliseconds: 1));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserListScreen()));
+                },
+                leading: Icon(
+                  CupertinoIcons.person_2_square_stack,
+                  // color: Colors.white,
+                ),
+                title: Text(
+                  "Manage Users",
+                  textScaleFactor: 1.1,
+                  style: TextStyle(
+
+                      // color: Colors.white,
+                      fontSize: 11.sp),
+                ),
+              ),
+            ),
+            // ListTile(
+            //   onTap: () async {
+            //     Navigator.pop(context);
+            //     await Future.delayed(Duration(milliseconds: 1));
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => CompanyListScreen()));
+            //   },
+            //   leading: Icon(
+            //     CupertinoIcons.book_circle,
+            //     // color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     "Company List",
+            //     textScaleFactor: 1.1,
+            //     style: TextStyle(
+
+            //         // color: Colors.white,
+            //         fontSize: 11.sp),
+            //   ),
+            // ),
             ListTile(
               onTap: () async {
                 Navigator.pop(context);

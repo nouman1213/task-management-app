@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../model/status_list_model.dart';
@@ -10,16 +11,19 @@ class TaskStatusController extends GetxController {
   RxList<GetStatusList> taskStatusList = <GetStatusList>[].obs;
   RxBool isInsertingStatus = false.obs;
   TextEditingController insertStatusController = TextEditingController();
+  final box = GetStorage();
+  var fkcoid;
   @override
   void onInit() {
     super.onInit();
+    fkcoid = box.read("fkCoid");
     fetchTaskStatusList();
   }
 
   Future<void> fetchTaskStatusList() async {
     try {
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/TaskStatus/GetStatus"));
+          "https://erm.scarletsystems.com:132/Api/TaskStatus/GetStatus?coid=$fkcoid"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);

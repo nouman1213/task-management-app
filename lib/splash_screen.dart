@@ -1,9 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/screens/main_screen.dart';
+
+import 'screens/auth_screen/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,12 +16,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final _box = GetStorage();
+  var email;
+  var pass;
+  void checkUserCredential() async {
+    await Future.delayed(Duration(seconds: 3)); // Delay execution
+    try {
+      email = _box.read('loginId');
+      pass = _box.read('uspass');
+      print('Stored Email: $email');
+      print('Stored Password: $pass');
+
+      if (email != null && pass != null) {
+        Get.offAll(() => MainScreen());
+      } else {
+        Get.offAll(() => LoginScreen());
+      }
+    } catch (e) {
+      print('Navigation Error: $e');
+    }
+  }
+
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () {
-      Get.offAll(() => MainScreen());
-    });
+    checkUserCredential();
   }
 
   @override

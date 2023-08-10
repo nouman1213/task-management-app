@@ -5,34 +5,32 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../../model/priority_list_model.dart';
+import '../../model/userlist_model.dart';
 
-class PriorityContoller extends GetxController {
-  String selectedPriority = 'Select Priority';
-  int selectedPriorityId = -1;
-  RxList<GetPriorityList> priorityList = <GetPriorityList>[].obs;
-  RxBool isInsertingPriority = false.obs;
-  TextEditingController insertPriorityController = TextEditingController();
-  TextEditingController updatePriorityController = TextEditingController();
+class UserController extends GetxController {
+  RxList<UserListModel> userList = <UserListModel>[].obs;
+  RxBool isInsertingUser = false.obs;
+  TextEditingController insertUserController = TextEditingController();
+  TextEditingController updateUserController = TextEditingController();
+
   final box = GetStorage();
   var fkcoid;
   @override
   void onInit() {
     super.onInit();
     fkcoid = box.read("fkCoid");
-    // print("fckiddd:::$fkcoid");
-    fetchPriorityList();
+    fetchUserList();
   }
 
-  Future<void> fetchPriorityList() async {
+  Future<void> fetchUserList() async {
     try {
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/TaskPriority/GetPriority?coid=$fkcoid"));
+          "https://erm.scarletsystems.com:132/Api/Account/GetUserList?coid=$fkcoid"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        priorityList.value =
-            jsonData.map((e) => GetPriorityList.fromJson(e)).toList();
+        userList.value =
+            jsonData.map((e) => UserListModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load data from api");
       }
@@ -42,16 +40,15 @@ class PriorityContoller extends GetxController {
     }
   }
 
-  // insert priority method
-  Future<void> insertPriority(priorityName, fkcoid) async {
+  Future<void> insertUser(loginId, usPW, fkcoid) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingUser.value = true;
       final response = await http.post(
-        Uri.parse(
-            "https://erm.scarletsystems.com:132/Api/TaskPriority/InsertPriority"),
+        Uri.parse("https://erm.scarletsystems.com:132/Api/Account/NewUser"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "PRTNAME": priorityName,
+          "LOGINID": loginId,
+          "USPW": fkcoid,
           "FKCOID": fkcoid,
         }),
       );
@@ -65,13 +62,13 @@ class PriorityContoller extends GetxController {
       print("Error: $e");
     } finally {
       // Set loading state back to false
-      isInsertingPriority.value = false;
+      isInsertingUser.value = false;
     }
   }
 
-  Future<void> deletePriority(int? prtId) async {
+  Future<void> deleteUser(int? prtId) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingUser.value = true;
       final response = await http.get(Uri.parse(
           "https://erm.scarletsystems.com:132/Api/TaskPriority/DeletePriority?PRTID=$prtId"));
 
@@ -86,17 +83,18 @@ class PriorityContoller extends GetxController {
     }
   }
 
-  Future<void> updatePriority(priorityName, fkcoid, prtId) async {
+  Future<void> updateUser(
+    loginId,
+    usPW,
+  ) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingUser.value = true;
       final response = await http.post(
-        Uri.parse(
-            "https://erm.scarletsystems.com:132/Api/TaskPriority/UpdatePriority"),
+        Uri.parse("https://erm.scarletsystems.com:132/Api/Account/UpdateUser"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "PRTNAME": priorityName,
-          "FKCOID": fkcoid,
-          "PRTID": prtId,
+          "LOGINID": usPW,
+          "USPW": fkcoid,
         }),
       );
 
@@ -109,7 +107,7 @@ class PriorityContoller extends GetxController {
       print("Error: $e");
     } finally {
       // Set loading state back to false
-      isInsertingPriority.value = false;
+      isInsertingUser.value = false;
     }
   }
 }

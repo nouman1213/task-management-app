@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
+void showAlert({String? title, String? message}) {
+  Get.snackbar(
+    title!,
+    message!,
+    duration: Duration(seconds: 3),
+    backgroundColor: Colors.white,
+    colorText: Colors.black,
+    snackPosition: SnackPosition.BOTTOM,
+    mainButton: TextButton(
+      onPressed: () {
+        // Perform an action when the SnackBar action button is pressed.
+        Get.back();
+      },
+      child: Text(
+        'Close',
+        style: TextStyle(color: Colors.blue.shade900),
+      ),
+    ),
+  );
+}
 
 enum TaskStatus {
   todo(Icons.assignment, Colors.pink),

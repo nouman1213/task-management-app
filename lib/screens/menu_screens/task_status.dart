@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/components/roundbutton.dart';
-import 'package:task_management_app/controller/menu_controller/priority_contoller.dart';
 
 import '../../constant/const.dart';
+import '../../controller/menu_controller/task_status_controller.dart';
 
-class PirorityScreen extends StatelessWidget {
-  PirorityScreen({super.key});
-  final priorityContoller = Get.put(PriorityContoller());
+class TaskStatusScreen extends StatelessWidget {
+  TaskStatusScreen({super.key});
+  final statusController = Get.put(TaskStatusController());
   void _showAddPriorityDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Add Priority'),
+            title: Text('Add Status'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: priorityContoller.insertPriorityController,
-                  decoration: InputDecoration(labelText: 'Priority Name'),
+                  controller: statusController.insertStatusController,
+                  decoration: InputDecoration(labelText: 'Status Name'),
                 ),
                 SizedBox(height: 10),
                 Obx(() {
-                  if (priorityContoller.isInsertingPriority.value) {
+                  if (statusController.isInsertingStatus.value) {
                     return CircularProgressIndicator();
                   } else {
                     return SizedBox.shrink();
@@ -34,14 +34,13 @@ class PirorityScreen extends StatelessWidget {
             actions: [
               ElevatedButton(
                 onPressed: () async {
-                  if (priorityContoller
-                      .insertPriorityController.text.isNotEmpty) {
-                    await priorityContoller.insertPriority(
-                        priorityContoller.insertPriorityController.text);
-                    priorityContoller.insertPriorityController.clear();
+                  if (statusController.insertStatusController.text.isNotEmpty) {
+                    await statusController.insertStatus(
+                        statusController.insertStatusController.text);
+                    statusController.insertStatusController.clear();
                     Navigator.of(context).pop();
-                    priorityContoller.fetchPriorityList();
-                    priorityContoller.isInsertingPriority.value = false;
+                    statusController.fetchTaskStatusList();
+                    statusController.isInsertingStatus.value = false;
                   }
                 },
                 child: Text('Submit'),
@@ -62,12 +61,12 @@ class PirorityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "All Pirorities",
-          style: kTextStyleWhite(18),
+          "Task Status",
+          style: kTextStyleBoldWhite(18),
         ),
       ),
       body: FutureBuilder(
-        future: priorityContoller.fetchPriorityList(),
+        future: statusController.fetchTaskStatusList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -83,13 +82,15 @@ class PirorityScreen extends StatelessWidget {
                   Obx(() => Expanded(
                         child: ListView.builder(
                           key: UniqueKey(),
-                          itemCount: priorityContoller.priorityList.length,
+                          itemCount: statusController.taskStatusList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final priority =
-                                priorityContoller.priorityList[index];
-                            return Text(
-                              priority.pRTNAME ?? '',
-                              style: kTextStyleBlack(18),
+                            final status =
+                                statusController.taskStatusList[index];
+                            return Card(
+                              child: ListTile(
+                                title: Text(status.sTSNAME ?? '',
+                                    style: kTextStyleBlack(18)),
+                              ),
                             );
                           },
                         ),
@@ -101,7 +102,7 @@ class PirorityScreen extends StatelessWidget {
                         Expanded(
                             child: RoundButton(
                                 backgroundColor: Colors.green.shade500,
-                                title: "Add priority",
+                                title: "Add Status",
                                 onTap: () {
                                   _showAddPriorityDialog(context);
                                 })),

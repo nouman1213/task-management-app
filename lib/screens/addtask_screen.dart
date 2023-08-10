@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 
 import '../components/roundbutton.dart';
+import '../constant/const.dart';
 import '../controller/menu_controller/priority_contoller.dart';
 import '../controller/task/addTaskController.dart';
 import 'package:getwidget/getwidget.dart';
@@ -12,6 +12,10 @@ import 'package:getwidget/getwidget.dart';
 class AddNewTaskScreen extends StatelessWidget {
   final AddTaskController _addTaskController = Get.put(AddTaskController());
   final priorityContoller = Get.put(PriorityContoller());
+
+  final _box = GetStorage();
+  var email;
+  var pass;
 
 // Date picker function
   Future<void> _selectDate(BuildContext context) async {
@@ -47,18 +51,16 @@ class AddNewTaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    email = _box.read('loginId');
+    pass = _box.read('uspass');
+    print('Stored Email: $email');
+    print('Stored Password: $pass');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: Text(
           'Add New Task',
-          style: GoogleFonts.abel(
-            textStyle: TextStyle(
-                // color: Colors.white,
-                fontWeight: FontWeight.w600,
-                // height: 1.5,
-                fontSize: 16.sp),
-          ),
+          style: kTextStyleBoldWhite(18),
         ),
         backgroundColor: Colors.blue[800],
       ),
