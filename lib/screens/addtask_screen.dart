@@ -6,12 +6,14 @@ import 'package:intl/intl.dart';
 import '../components/roundbutton.dart';
 import '../constant/const.dart';
 import '../controller/menu_controller/priority_contoller.dart';
+import '../controller/menu_controller/user_controller.dart';
 import '../controller/task/addTaskController.dart';
 import 'package:getwidget/getwidget.dart';
 
 class AddNewTaskScreen extends StatelessWidget {
   final AddTaskController _addTaskController = Get.put(AddTaskController());
   final priorityContoller = Get.put(PriorityContoller());
+  final userContoller = Get.put(UserController());
 
   final _box = GetStorage();
   var email;
@@ -185,9 +187,32 @@ class AddNewTaskScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              TextField(
-                textInputAction: TextInputAction.done,
-                controller: _addTaskController.assignToController,
+              DropdownButtonFormField<int>(
+                validator: (v) {
+                  if (v == null || v == -1) {
+                    return 'Select Assign To';
+                  } else {
+                    return null;
+                  }
+                },
+                value: userContoller.selectedAssignId,
+                items: [
+                  DropdownMenuItem<int>(
+                    value: -1, // -1 to represent "Please select priority"
+                    child: Text(userContoller.selectedAssignTo),
+                  ),
+                  ...userContoller.userList.map((assignTo) {
+                    return DropdownMenuItem<int>(
+                      value: assignTo.uSID!,
+                      child: Text(assignTo.lOGINID ?? ''),
+                    );
+                  }).toList(),
+                ],
+                onChanged: (value) {
+                  userContoller.selectedAssignId = value!;
+                  print(
+                      " dropdownValue::::::${userContoller.selectedAssignId = value!}");
+                },
                 decoration: InputDecoration(
                   labelText: 'Assign To',
                   border: OutlineInputBorder(

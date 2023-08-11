@@ -11,6 +11,7 @@ class TaskStatusController extends GetxController {
   RxList<GetStatusList> taskStatusList = <GetStatusList>[].obs;
   RxBool isInsertingStatus = false.obs;
   TextEditingController insertStatusController = TextEditingController();
+  TextEditingController updateStatusController = TextEditingController();
   final box = GetStorage();
   var fkcoid;
   @override
@@ -39,20 +40,67 @@ class TaskStatusController extends GetxController {
   }
 
   // insert priority method
-  Future<void> insertStatus(String statusName) async {
+  Future<void> insertTaskStatus(priorityName, fkcoid) async {
     try {
       isInsertingStatus.value = true;
       final response = await http.post(
         Uri.parse(
             "https://erm.scarletsystems.com:132/Api/TaskStatus/InsertTStatus"),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"STSNAME": statusName}),
+        body: jsonEncode({
+          "STSNAME": priorityName,
+          "FKCOID": fkcoid,
+        }),
       );
 
       if (response.statusCode == 200) {
-        print("Status inserted successfully");
+        print("Priority inserted successfully");
       } else {
-        throw Exception("Failed to insert Status");
+        throw Exception("Failed to insert priority");
+      }
+    } catch (e) {
+      print("Error: $e");
+    } finally {
+      // Set loading state back to false
+      isInsertingStatus.value = false;
+    }
+  }
+
+  Future<void> deleteTaskStatus(int? stsid) async {
+    try {
+      isInsertingStatus.value = true;
+      final response = await http.get(Uri.parse(
+          "https://erm.scarletsystems.com:132/Api/TaskStatus/DeleteTStatus?STSID=$stsid"));
+
+      if (response.statusCode == 200) {
+        // final List<dynamic> jsonData = json.decode(response.body);
+      } else {
+        throw Exception("Failed to delete data");
+      }
+    } catch (e) {
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> updateTaskStatus(stsid, stnam, fkcoid) async {
+    try {
+      isInsertingStatus.value = true;
+      final response = await http.post(
+        Uri.parse(
+            "https://erm.scarletsystems.com:132/Api/TaskStatus/UpdateTStatus"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "STSID": stsid,
+          "STSNAME": stnam,
+          "FKCOID": fkcoid,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Priority inserted successfully");
+      } else {
+        throw Exception("Failed to insert priority");
       }
     } catch (e) {
       print("Error: $e");

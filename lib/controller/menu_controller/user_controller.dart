@@ -8,10 +8,13 @@ import 'package:http/http.dart' as http;
 import '../../model/userlist_model.dart';
 
 class UserController extends GetxController {
+  String selectedAssignTo = 'Select AssignTo';
+  int selectedAssignId = -1;
   RxList<UserListModel> userList = <UserListModel>[].obs;
   RxBool isInsertingUser = false.obs;
   TextEditingController insertUserController = TextEditingController();
   TextEditingController updateUserController = TextEditingController();
+  TextEditingController userPassController = TextEditingController();
 
   final box = GetStorage();
   var fkcoid;
@@ -48,7 +51,7 @@ class UserController extends GetxController {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "LOGINID": loginId,
-          "USPW": fkcoid,
+          "USPW": usPW,
           "FKCOID": fkcoid,
         }),
       );
@@ -66,11 +69,11 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> deleteUser(int? prtId) async {
+  Future<void> deleteUser(int? usid) async {
     try {
       isInsertingUser.value = true;
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/TaskPriority/DeletePriority?PRTID=$prtId"));
+          "https://erm.scarletsystems.com:132/Api/Account/DeleteUser?usid=$usid"));
 
       if (response.statusCode == 200) {
         // final List<dynamic> jsonData = json.decode(response.body);
@@ -93,8 +96,8 @@ class UserController extends GetxController {
         Uri.parse("https://erm.scarletsystems.com:132/Api/Account/UpdateUser"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "LOGINID": usPW,
-          "USPW": fkcoid,
+          "LOGINID": loginId,
+          "USPW": usPW,
         }),
       );
 

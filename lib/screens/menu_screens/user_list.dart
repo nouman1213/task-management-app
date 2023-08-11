@@ -21,6 +21,10 @@ class UserListScreen extends StatelessWidget {
                   controller: userController.insertUserController,
                   decoration: InputDecoration(labelText: 'User Name'),
                 ),
+                TextField(
+                  controller: userController.userPassController,
+                  decoration: InputDecoration(labelText: 'User Password'),
+                ),
                 SizedBox(height: 10),
                 Obx(() {
                   if (userController.isInsertingUser.value) {
@@ -34,15 +38,17 @@ class UserListScreen extends StatelessWidget {
             actions: [
               ElevatedButton(
                 onPressed: () async {
-                  if (userController.insertUserController.text.isNotEmpty) {
+                  if (userController.insertUserController.text.isNotEmpty &&
+                      userController.userPassController.text.isNotEmpty) {
                     await userController.insertUser(
                         userController.insertUserController.text,
-                        userController.userList[0].uSPW,
+                        userController.userPassController.text,
                         userController.fkcoid);
-                    userController.insertUserController.clear();
-                    Navigator.of(context).pop();
                     userController.fetchUserList();
+                    userController.insertUserController.clear();
+                    userController.userPassController.clear();
                     userController.isInsertingUser.value = false;
+                    Navigator.of(context).pop();
                   }
                 },
                 child: Text('Submit'),
@@ -114,7 +120,6 @@ class UserListScreen extends StatelessWidget {
                                                   context,
                                                   userController
                                                       .updateUserController,
-                                                  user.lOGINID,
                                                   user.uSPW,
                                                 );
                                               },
@@ -127,7 +132,7 @@ class UserListScreen extends StatelessWidget {
                                             child: IconButton(
                                               onPressed: () {
                                                 _showDeleteUserDialog(
-                                                    context, user.fKCOID);
+                                                    context, user.uSID);
                                               },
                                               icon: Icon(Icons.delete,
                                                   color: Colors.red),
@@ -159,36 +164,51 @@ class UserListScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteUserDialog(BuildContext context, int? cOID) {
+  void _showDeleteUserDialog(BuildContext context, int? usid) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete Company'),
-          content: Text('Are you sure you want to delete this user?'),
-          actions: [
-            ElevatedButton(
-              onPressed: () async {
-                // Call the delete method using cOID and handle deletion logic
-                await userController.deleteUser(cOID);
-                Navigator.of(context).pop(); // Close the dialog
-                userController.fetchUserList(); // Update the company list
-              },
-              child: Text('Delete'),
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            AlertDialog(
+              title: Text('Delete Company'),
+              content: Text('Are you sure you want to delete this user?'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () async {
+                    userController.isInsertingUser.value = true;
+
+                    await userController.deleteUser(usid);
+                    userController.fetchUserList();
+                    userController.isInsertingUser.value = false;
+
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('Delete'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('Cancel'),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
+            Obx(() {
+              if (userController.isInsertingUser.value) {
+                return CircularProgressIndicator();
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
           ],
         );
       },
     );
   }
 
-  void _showUpdateUserDialog(BuildContext context, controller, loginId, usPW) {
+  void _showUpdateUserDialog(BuildContext context, controller, usPW) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -216,14 +236,13 @@ class UserListScreen extends StatelessWidget {
                 onPressed: () async {
                   print("Inside onPressed callback");
                   print("Controller Text: ${controller.text}");
-                  print("loginId: $loginId");
+                  // print("loginId: $loginId");
                   print("usPW: $usPW");
 
                   if (controller.text.isNotEmpty) {
                     print("Updating priority...");
 
-                    await userController.updateUser(
-                        controller.text, userController.fkcoid);
+                    await userController.updateUser(controller.text, usPW);
 
                     userController.fetchUserList();
                     userController.isInsertingUser.value = false;
