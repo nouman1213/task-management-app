@@ -11,7 +11,7 @@ class TaskAssignedToMeController extends GetxController {
       endDate: '2023-05-05',
       priority: 'High',
       assignedTo: 'me',
-      status: 'To do'.obs,
+      status: 'To do',
     ),
   ].obs;
 

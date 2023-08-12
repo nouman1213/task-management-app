@@ -88,6 +88,7 @@ class UserController extends GetxController {
 
   Future<void> updateUser(
     loginId,
+    usid,
     usPW,
   ) async {
     try {
@@ -97,14 +98,15 @@ class UserController extends GetxController {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "LOGINID": loginId,
+          "USID": usid,
           "USPW": usPW,
         }),
       );
 
       if (response.statusCode == 200) {
-        print("Priority inserted successfully");
+        print("user inserted successfully");
       } else {
-        throw Exception("Failed to insert priority");
+        throw Exception("Failed to insert user");
       }
     } catch (e) {
       print("Error: $e");

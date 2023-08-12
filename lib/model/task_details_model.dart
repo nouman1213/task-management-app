@@ -1,4 +1,4 @@
-class GetTaskListModel {
+class TaskDetailsListModel {
   final int? tASKID;
   final int? fKCOID;
   final int? uSID;
@@ -14,7 +14,7 @@ class GetTaskListModel {
   final String? cOMPDT;
   final String? lOGINID;
 
-  GetTaskListModel({
+  TaskDetailsListModel({
     this.tASKID,
     this.fKCOID,
     this.uSID,
@@ -31,7 +31,7 @@ class GetTaskListModel {
     this.lOGINID,
   });
 
-  GetTaskListModel.fromJson(Map<String, dynamic> json)
+  TaskDetailsListModel.fromJson(Map<String, dynamic> json)
       : tASKID = json['TASKID'] as int?,
         fKCOID = json['FKCOID'] as int?,
         uSID = json['USID'] as int?,

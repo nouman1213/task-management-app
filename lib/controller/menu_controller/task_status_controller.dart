@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import '../../model/status_list_model.dart';
 
 class TaskStatusController extends GetxController {
+  String selectedTaskStatus = 'Select Task Status';
+  int selectedTaskStId = -1;
   RxList<GetStatusList> taskStatusList = <GetStatusList>[].obs;
   RxBool isInsertingStatus = false.obs;
   TextEditingController insertStatusController = TextEditingController();

@@ -63,10 +63,10 @@ class TaskAssignedToMeScreen extends StatelessWidget {
                 final task = tasks[index];
                 return GestureDetector(
                     onTap: () {
-                      Get.to(() => TaskDetailScreen(
-                            task: task,
-                            addTaskController: _addTaskController,
-                          ));
+                      // Get.to(() => TaskDetailScreen(
+                      //       task: task,
+                      //       addTaskController: _addTaskController,
+                      //     ));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

@@ -5,7 +5,6 @@ import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_management_app/components/roundbutton.dart';
 import 'package:task_management_app/controller/auth/login_controller.dart';
-import 'package:task_management_app/screens/auth_screen/registeration_scree.dart';
 import '../../components/keybord_hider.dart';
 import '../../components/textfield.dart';
 
@@ -117,32 +116,6 @@ class LoginScreen extends StatelessWidget {
                                 backgroundColor: Colors.blue.shade900,
                                 loading: _controller.loading.value,
                               )),
-                          // SizedBox(height: 2.h),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Get.to(() => RegisterationScreen(),
-                          //         transition: Transition.leftToRightWithFade);
-                          //   },
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       Text(
-                          //         "Don't have an account? ",
-                          //         style: TextStyle(
-                          //           fontSize: 14.sp,
-                          //           color: Colors.white,
-                          //         ),
-                          //       ),
-                          //       Text(
-                          //         "SignUp",
-                          //         style: TextStyle(
-                          //             fontSize: 14.sp,
-                          //             color: Colors.blue.shade900,
-                          //             fontWeight: FontWeight.bold),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),

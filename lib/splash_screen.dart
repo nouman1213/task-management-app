@@ -19,15 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   final _box = GetStorage();
   var email;
   var pass;
+  var fkcoid;
   void checkUserCredential() async {
     await Future.delayed(Duration(seconds: 3)); // Delay execution
     try {
       email = _box.read('loginId');
       pass = _box.read('uspass');
+      fkcoid = _box.read('fkCoid');
       print('Stored Email: $email');
       print('Stored Password: $pass');
+      print('Stored fkcoid: $fkcoid');
 
-      if (email != null && pass != null) {
+      if (email != null && pass != null && fkcoid != null && fkcoid != "") {
         Get.offAll(() => MainScreen());
       } else {
         Get.offAll(() => LoginScreen());

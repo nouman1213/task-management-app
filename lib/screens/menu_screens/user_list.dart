@@ -120,6 +120,7 @@ class UserListScreen extends StatelessWidget {
                                                   context,
                                                   userController
                                                       .updateUserController,
+                                                  user.uSID,
                                                   user.uSPW,
                                                 );
                                               },
@@ -208,7 +209,7 @@ class UserListScreen extends StatelessWidget {
     );
   }
 
-  void _showUpdateUserDialog(BuildContext context, controller, usPW) {
+  void _showUpdateUserDialog(BuildContext context, controller, usid, usPW) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -236,13 +237,14 @@ class UserListScreen extends StatelessWidget {
                 onPressed: () async {
                   print("Inside onPressed callback");
                   print("Controller Text: ${controller.text}");
-                  // print("loginId: $loginId");
+                  print("usid: $usid");
                   print("usPW: $usPW");
 
                   if (controller.text.isNotEmpty) {
-                    print("Updating priority...");
+                    print("Updating user...");
 
-                    await userController.updateUser(controller.text, usPW);
+                    await userController.updateUser(
+                        controller.text, usid, usPW);
 
                     userController.fetchUserList();
                     userController.isInsertingUser.value = false;

@@ -46,69 +46,69 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
               ),
             ),
           ),
-          Flexible(
-            child: Obx(
-              () {
-                final List<Task> tasks = addTaskController.allTasks
-                    .where((task) => isSameDay(
-                        DateFormat('yyyy-MM-dd').parse(task.startDate),
-                        selectedDate))
-                    .toList();
-                if (tasks.isEmpty) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'No tasks for today',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  );
-                }
+          // Flexible(
+          //   child: Obx(
+          //     () {
+          //       final List<Task> tasks = addTaskController.allTasks
+          //           .where((task) => isSameDay(
+          //               DateFormat('yyyy-MM-dd').parse(task.startDate),
+          //               selectedDate))
+          //           .toList();
+          //       if (tasks.isEmpty) {
+          //         return Container(
+          //           decoration: BoxDecoration(
+          //             color: Colors.white,
+          //             borderRadius: BorderRadius.only(
+          //               topLeft: Radius.circular(30),
+          //               topRight: Radius.circular(30),
+          //             ),
+          //           ),
+          //           child: Center(
+          //             child: Text(
+          //               'No tasks for today',
+          //               style: TextStyle(
+          //                 fontSize: 18,
+          //                 fontWeight: FontWeight.bold,
+          //                 color: Colors.black,
+          //               ),
+          //             ),
+          //           ),
+          //         );
+          //       }
 
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 12),
-                    itemCount: tasks.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Task task = tasks[index];
+          //       return Container(
+          //         decoration: BoxDecoration(
+          //           color: Colors.white,
+          //           borderRadius: BorderRadius.only(
+          //             topLeft: Radius.circular(30),
+          //             topRight: Radius.circular(30),
+          //           ),
+          //         ),
+          //         child: ListView.builder(
+          //           padding: EdgeInsets.only(top: 12),
+          //           itemCount: tasks.length,
+          //           itemBuilder: (BuildContext context, int index) {
+          //             final Task task = tasks[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(() => TaskDetailScreen(
-                              task: task,
-                              addTaskController: addTaskController));
-                        },
-                        child: Card(
-                          child: ListTile(
-                            title: Text(task.title),
-                            trailing: Text(task.startDate),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
+          //             return GestureDetector(
+          //               onTap: () {
+          //                 Get.to(() => TaskDetailScreen(
+          //                     task: task,
+          //                     addTaskController: addTaskController));
+          //               },
+          //               child: Card(
+          //                 child: ListTile(
+          //                   title: Text(task.title),
+          //                   trailing: Text(task.startDate),
+          //                 ),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

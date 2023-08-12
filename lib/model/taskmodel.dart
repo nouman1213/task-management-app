@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 class Task {
   final String title;
   final String details;
@@ -7,7 +5,7 @@ class Task {
   final String endDate;
   final String priority;
   final String assignedTo;
-  RxString status;
+  final String status;
 
   Task(
       {required this.title,

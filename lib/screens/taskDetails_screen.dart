@@ -1,122 +1,170 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
-import 'package:task_management_app/model/taskmodel.dart';
+import 'package:intl/intl.dart';
+import 'package:task_management_app/model/task_details_model.dart';
+import 'package:task_management_app/screens/allTask_screen.dart';
 
 import '../components/button2.dart';
 import '../constant/const.dart';
-import '../controller/task/addTaskController.dart';
+import '../controller/menu_controller/task_status_controller.dart';
+import '../controller/task/task_detail_controller.dart';
 
-class TaskDetailScreen extends StatelessWidget {
-  final Task task;
-  final AddTaskController addTaskController;
+class TaskDetailScreen extends StatefulWidget {
+  int taskid;
+  int fkcoid;
+  TaskDetailScreen({
+    Key? key,
+    required this.taskid,
+    required this.fkcoid,
+  }) : super(key: key);
 
-  TaskDetailScreen({required this.task, required this.addTaskController});
+  @override
+  State<TaskDetailScreen> createState() => _TaskDetailScreenState();
+}
 
-  void deleteTask() {
-    addTaskController.removeTask(task);
-    Get.back();
-  }
+class _TaskDetailScreenState extends State<TaskDetailScreen> {
+  final statusContoller = Get.put(TaskStatusController());
+
+  final detailsController = Get.put(TaskDetailsController());
 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+
+// Format the current date as "YYYY-MM-DD"
+    String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.to(() => AllTasksScreen());
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: Text('Task Details', style: kTextStyleBoldWhite(18)),
         // backgroundColor: Colors.amber[300],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${task.title}',
-              style: TextStyle(fontSize: 24),
-            ),
-            kVerticalSpace(25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomRow(
-                  color: Colors.blue.shade800,
-                  label: task.startDate.toString(),
-                  icon: Icons.calendar_month_sharp,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(width: 1, color: Colors.blue.shade800),
+      body: FutureBuilder<TaskDetailsListModel>(
+        future: detailsController.fetchTaskDetails(
+            fkcoid: widget.fkcoid, taskid: widget.taskid),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            final TaskDetailsListModel taskDetails = snapshot.data;
+            String formatDate(String dateString) {
+              final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+              final outputFormat = DateFormat("MMM dd, yyyy");
+
+              final dateTime = inputFormat.parse(dateString);
+              final formattedDate = outputFormat.format(dateTime);
+
+              return formattedDate;
+            }
+
+            String formattedStartDate = formatDate(taskDetails.sTDT ?? '');
+            String formattedEndDate = formatDate(taskDetails.eNDT ?? '');
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    taskDetails.tTITLE ?? '',
+                    style: kTextStyleBoldBlack(24),
                   ),
-                  child: const SizedBox(
-                    width: 20,
-                    height: 20,
+                  kVerticalSpace(25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomRow(
+                        color: Colors.blue.shade800,
+                        label: formattedStartDate,
+                        icon: Icons.calendar_month_sharp,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(16),
+                          border:
+                              Border.all(width: 1, color: Colors.blue.shade800),
+                        ),
+                        child: const SizedBox(
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
+                      CustomRow(
+                        color: Colors.blue.shade800,
+                        label: formattedEndDate,
+                        icon: Icons.calendar_month_sharp,
+                      ),
+                    ],
                   ),
-                ),
-                CustomRow(
-                  color: Colors.blue.shade800,
-                  label: task.endDate.toString(),
-                  icon: Icons.calendar_month_sharp,
-                ),
-              ],
-            ),
-            kVerticalSpace(25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Obx(
-                    () => CustomRow(
-                      color: Colors.blue.shade800,
-                      label: 'Status: ${task.status}',
-                      icon: task.status.value == 'Completed'
-                          ? Icons.done
-                          : Icons.incomplete_circle,
-                    ),
+                  kVerticalSpace(25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomRow(
+                          color: Colors.blue.shade800,
+                          label: taskDetails.sTSNAME.toString(),
+                          icon: Icons.switch_access_shortcut_add_sharp,
+                          //  task.status == 'Completed'
+                          //     ? Icons.done
+                          //     : Icons.incomplete_circle,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: CustomRow(
+                          color: Colors.blue.shade800,
+                          label: taskDetails.pRTNAME.toString(),
+                          icon: Icons.low_priority,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: CustomRow(
-                    color: Colors.blue.shade800,
-                    label: task.priority.toString(),
-                    icon: Icons.low_priority,
+                  kVerticalSpace(25),
+                  Text('Details', style: kTextStyleBoldBlack(20.0)),
+                  Text(
+                    taskDetails.tDTL.toString(),
+                    style: kTextStyleBlack(16.0),
                   ),
-                ),
-              ],
-            ),
-            kVerticalSpace(25),
-            Text(
-              'Details',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+                  kVerticalSpace(50),
+                  CustomButton(
+                    label: 'Change Status',
+                    color: Colors.green.withOpacity(0.3),
+                    onTap: () {
+                      showChangeStatusDialog(
+                        stid: taskDetails.tSTATUS ?? -1,
+                        tstatus: statusContoller.selectedTaskStId,
+                        compdate: formattedDate,
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
-            Text(
-              '${task.details}',
-              style: TextStyle(fontSize: 18),
-            ),
-            kVerticalSpace(50),
-            CustomButton(
-              label: 'Change Status',
-              color: Colors.green.withOpacity(0.3),
-              onTap: () {
-                showChangeStatusDialog(task, addTaskController);
-              },
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
 
-  void showChangeStatusDialog(Task task, AddTaskController addTaskController) {
-    String? newStatus = task.status.value; // Set the initial value
+  void showChangeStatusDialog(
+      {required stid, required tstatus, required compdate}) {
     Get.dialog(
       AlertDialog(
         title: Text('Change Task Status'),
@@ -125,40 +173,41 @@ class TaskDetailScreen extends StatelessWidget {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  title: Text('To Do'),
-                  leading: Radio(
-                    value: 'To Do',
-                    groupValue: newStatus,
-                    onChanged: (value) {
-                      setState(() {
-                        newStatus = value;
-                      });
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: Text('In Progress'),
-                  leading: Radio(
-                    value: 'In Progress',
-                    groupValue: newStatus,
-                    onChanged: (value) {
-                      setState(() {
-                        newStatus = value;
-                      });
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: Text('Completed'),
-                  leading: Radio(
-                    value: 'Completed',
-                    groupValue: newStatus,
-                    onChanged: (value) {
-                      setState(() {
-                        newStatus = value;
-                      });
-                    },
+                DropdownButtonFormField<int>(
+                  validator: (v) {
+                    if (v == null || v == -1) {
+                      return 'Select Status';
+                    } else {
+                      return null;
+                    }
+                  },
+                  value: stid,
+                  items: [
+                    DropdownMenuItem<int>(
+                      value: -1, // -1 to represent "Please select status"
+                      child: Text(statusContoller.selectedTaskStatus),
+                    ),
+                    ...statusContoller.taskStatusList.map((status) {
+                      return DropdownMenuItem<int>(
+                        value: status.sTSID!,
+                        child: Text(status.sTSNAME ?? ''),
+                      );
+                    }).toList(),
+                  ],
+                  onChanged: (value) {
+                    statusContoller.selectedTaskStId = value!;
+                    print(
+                        " dropdownValue::::::${statusContoller.selectedTaskStId = value}");
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Status',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.blue.withOpacity(0.3),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -172,14 +221,26 @@ class TaskDetailScreen extends StatelessWidget {
               Get.back();
             },
           ),
-          TextButton(
-            child: Text('Update'),
-            onPressed: () {
-              if (newStatus != null) {
-                addTaskController.updateTaskStatus(task, newStatus!);
-              }
-              Get.back();
-            },
+          Obx(
+            () => TextButton(
+              child: detailsController.isTaskLoading.value
+                  ? CircularProgressIndicator() // Show loading indicator
+                  : Text('Update'),
+              onPressed: () async {
+                await detailsController.updateTask(
+                    taskid: widget.taskid,
+                    fkcoid: widget.fkcoid,
+                    tstatus: statusContoller.selectedTaskStId,
+                    compdate: compdate);
+                print('taskid::${widget.taskid}');
+                print('fkcoid::${widget.fkcoid}');
+                print('tstatus::${statusContoller.selectedTaskStId}');
+                print('compdate::${widget.taskid}');
+
+                Get.back();
+                setState(() {});
+              },
+            ),
           ),
         ],
       ),

@@ -46,16 +46,14 @@ class loginController extends GetxController {
         _box.write('uspass', jsonData['USPW']);
         _box.write('fkRoll', jsonData['FKROLE']);
         _box.write('fkCoid', jsonData['FKCOID']);
-        // print('USID: ${jsonData['USID']}');
-        // print('LOGINID: ${jsonData['LOGINID']}');
-        // print('USPW: ${jsonData['USPW']}');
-        // print('FKCOID: ${jsonData['FKCOID']}');
-        // print('FKROLE: ${jsonData['FKROLE']}');
 
         print('Response: ${response.body}');
         loading.value = false;
         clearControllers();
-        Get.offAll(() => MainScreen());
+        var fkcoid = _box.read("fkCoid");
+        if (fkcoid != null && fkcoid != "") {
+          Get.offAll(() => MainScreen());
+        }
       } else {
         // Handle error response
         loading.value = false;
