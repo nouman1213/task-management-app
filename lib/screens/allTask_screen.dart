@@ -29,13 +29,6 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Get.to(() => MainScreen());
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          automaticallyImplyLeading: false,
           elevation: 0,
           title: Text('All Tasks'),
           // backgroundColor: Colors.amber[300],
@@ -50,6 +43,12 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                 child: Text('Error: ${snapshot.error}'),
               );
             } else {
+              // Sort allTaskList by start date before building the ListView
+              taskController.allTaskList.sort((task1, task2) {
+                DateTime startdate1 = DateTime.parse(task1.sTDT.toString());
+                DateTime startdate2 = DateTime.parse(task2.sTDT.toString());
+                return startdate1.compareTo(startdate2);
+              });
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

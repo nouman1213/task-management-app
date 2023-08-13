@@ -75,11 +75,18 @@ class TaskStatusController extends GetxController {
           "https://erm.scarletsystems.com:132/Api/TaskStatus/DeleteTStatus?STSID=$stsid"));
 
       if (response.statusCode == 200) {
+        isInsertingStatus.value = false;
+
         // final List<dynamic> jsonData = json.decode(response.body);
       } else {
+        isInsertingStatus.value = false;
+
+        print("Failed to delete data. Status code: ${response.statusCode}");
         throw Exception("Failed to delete data");
       }
     } catch (e) {
+      isInsertingStatus.value = false;
+
       print("Error: $e");
       rethrow;
     }

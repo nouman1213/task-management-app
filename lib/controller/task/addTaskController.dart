@@ -15,18 +15,7 @@ class AddTaskController extends GetxController {
   final TextEditingController endDateController = TextEditingController();
   RxList<GetTaskListModel> allTaskList = <GetTaskListModel>[].obs;
   RxBool isTaskLoading = false.obs;
-  // final box = GetStorage();
-  // var fkcoid;
-  // @override
-  // Future<void> onInit() async {
-  //   super.onInit();
-  //   await GetStorage.init(); // Initialize GetStorage
-  //   fkcoid = box.read("fkCoid");
-  //   print("fkCoid value from storage: $fkcoid");
-  //   if (fkcoid != null) {
-  //     fetchAllTaskList();
-  //   }
-  // }
+  List<GetTaskListModel> todoTaskList = [];
 
   Future<void> fetchAllTaskList({required fkcoid}) async {
     if (fkcoid == null) {
@@ -40,6 +29,16 @@ class AddTaskController extends GetxController {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
+        // Clear existing todoTaskList before updating it
+        todoTaskList.clear();
+
+        // Loop through tasks and filter tasks with status 'To do'
+        for (var taskJson in jsonData) {
+          GetTaskListModel task = GetTaskListModel.fromJson(taskJson);
+          if (task.sTSNAME == 'To do') {
+            todoTaskList.add(task);
+          }
+        }
         allTaskList.value =
             jsonData.map((e) => GetTaskListModel.fromJson(e)).toList();
         print("api hit successfully${response.statusCode}");

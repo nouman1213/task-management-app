@@ -8,6 +8,7 @@ import 'package:task_management_app/components/drawer.dart';
 import '../constant/const.dart';
 import '../controller/task/addTaskController.dart';
 import '../controller/task/taskAssignToMeController.dart';
+import '../model/get_tasklist_model.dart';
 import '../model/taskmodel.dart';
 import 'allTask_screen.dart';
 import 'taskAssignedToMe.dart';
@@ -24,8 +25,6 @@ class HomeScreen2 extends StatefulWidget {
 
 class _HomeScreen2State extends State<HomeScreen2> {
   final AddTaskController taskController = Get.put(AddTaskController());
-
-  final TaskAssignedToMeController _assignMeController = Get.find();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var fkcoid;
@@ -166,9 +165,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                      '${_assignMeController.taskToAssignedMe.length} Task',
-                                      style: kTextStyleWhite(16)),
+                                  Text('0 Task', style: kTextStyleWhite(16)),
                                   Text('Assign To Me',
                                       style: kTextStyleWhite(22)),
                                   // Text('August 2023', style: kTextStyleWhite(16)),
@@ -187,9 +184,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                     // kVerticalSpace(10.0),
                     GFListTile(
                       onTap: () {
-                        // Get.to(() => ToDoScreen(
-                        //       addTaskController: _addTaskController,
-                        //     ));
+                        Get.to(() => ToDoScreen());
                       },
                       shadow: BoxShadow(),
                       color: Colors.grey.shade50,
@@ -201,7 +196,8 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         ),
                       ),
                       titleText: 'Todo',
-                      subTitle: Text('0 Task  - 0 Started'),
+                      subTitle: Text(
+                          '${taskController.todoTaskList.length} Task  - 0 Started'),
                     ),
                     GFListTile(
                       onTap: () {

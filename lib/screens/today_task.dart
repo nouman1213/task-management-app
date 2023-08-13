@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/model/taskmodel.dart';
 import 'package:task_management_app/screens/taskDetails_screen.dart';
 
 import '../components/calender.dart';
 import '../controller/task/addTaskController.dart';
+import '../model/get_tasklist_model.dart';
 
 class TodayTaskScreen extends StatefulWidget {
   @override
@@ -18,12 +20,30 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
   ScrollController scrollController = ScrollController();
 
   final AddTaskController addTaskController = Get.find<AddTaskController>();
+  var fkcoid;
+  @override
+  void initState() {
+    super.initState();
+    final box = GetStorage();
+    fkcoid = box.read("fkCoid");
+  }
 
   @override
   Widget build(BuildContext context) {
+    String formatDate(String dateString) {
+      final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+      final outputFormat = DateFormat("MMM dd, yyyy");
+
+      final dateTime = inputFormat.parse(dateString);
+      final formattedDate = outputFormat.format(dateTime);
+
+      return formattedDate;
+    }
+
     return Scaffold(
       backgroundColor: Colors.blue[900],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Today Task"),
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -46,69 +66,71 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
               ),
             ),
           ),
-          // Flexible(
-          //   child: Obx(
-          //     () {
-          //       final List<Task> tasks = addTaskController.allTasks
-          //           .where((task) => isSameDay(
-          //               DateFormat('yyyy-MM-dd').parse(task.startDate),
-          //               selectedDate))
-          //           .toList();
-          //       if (tasks.isEmpty) {
-          //         return Container(
-          //           decoration: BoxDecoration(
-          //             color: Colors.white,
-          //             borderRadius: BorderRadius.only(
-          //               topLeft: Radius.circular(30),
-          //               topRight: Radius.circular(30),
-          //             ),
-          //           ),
-          //           child: Center(
-          //             child: Text(
-          //               'No tasks for today',
-          //               style: TextStyle(
-          //                 fontSize: 18,
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Colors.black,
-          //               ),
-          //             ),
-          //           ),
-          //         );
-          //       }
+          Flexible(
+            child: Obx(
+              () {
+                final List<GetTaskListModel> tasks = addTaskController
+                    .allTaskList
+                    .where((task) => isSameDay(
+                        DateFormat('yyyy-MM-dd').parse(task.sTDT!),
+                        selectedDate))
+                    .toList();
+                if (tasks.isEmpty) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'No tasks for today',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-          //       return Container(
-          //         decoration: BoxDecoration(
-          //           color: Colors.white,
-          //           borderRadius: BorderRadius.only(
-          //             topLeft: Radius.circular(30),
-          //             topRight: Radius.circular(30),
-          //           ),
-          //         ),
-          //         child: ListView.builder(
-          //           padding: EdgeInsets.only(top: 12),
-          //           itemCount: tasks.length,
-          //           itemBuilder: (BuildContext context, int index) {
-          //             final Task task = tasks[index];
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(top: 12),
+                    itemCount: tasks.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final task = tasks[index];
 
-          //             return GestureDetector(
-          //               onTap: () {
-          //                 Get.to(() => TaskDetailScreen(
-          //                     task: task,
-          //                     addTaskController: addTaskController));
-          //               },
-          //               child: Card(
-          //                 child: ListTile(
-          //                   title: Text(task.title),
-          //                   trailing: Text(task.startDate),
-          //                 ),
-          //               ),
-          //             );
-          //           },
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(() => TaskDetailScreen(
+                                fkcoid: fkcoid,
+                                taskid: task.tASKID!,
+                              ));
+                        },
+                        child: Card(
+                          child: ListTile(
+                            title: Text(task.tTITLE!),
+                            trailing: Text(formatDate(task.sTDT ?? "")),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

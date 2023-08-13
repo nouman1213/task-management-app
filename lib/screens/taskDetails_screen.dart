@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/components/toast/gf_toast.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/model/task_details_model.dart';
 import 'package:task_management_app/screens/allTask_screen.dart';
+import 'package:task_management_app/screens/home_screen2.dart';
+import 'package:task_management_app/screens/main_screen.dart';
 
 import '../components/button2.dart';
 import '../constant/const.dart';
@@ -37,13 +40,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.to(() => AllTasksScreen());
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-        automaticallyImplyLeading: false,
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Get.to(() => AllTasksScreen());
+        //   },
+        //   icon: Icon(Icons.arrow_back),
+        // ),
+        // automaticallyImplyLeading: false,
         elevation: 0,
         title: Text('Task Details', style: kTextStyleBoldWhite(18)),
         // backgroundColor: Colors.amber[300],
@@ -237,8 +240,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 print('tstatus::${statusContoller.selectedTaskStId}');
                 print('compdate::${widget.taskid}');
 
-                Get.back();
-                setState(() {});
+                Get.to(() => MainScreen());
+                GFToast.showToast('Task status update successfully', context);
               },
             ),
           ),
