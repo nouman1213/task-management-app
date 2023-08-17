@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
 
 import '../../model/userlist_model.dart';
@@ -43,7 +44,7 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> insertUser(loginId, usPW, fkcoid) async {
+  Future<void> insertUser(context, loginId, usPW, fkcoid) async {
     try {
       isInsertingUser.value = true;
       final response = await http.post(
@@ -57,6 +58,8 @@ class UserController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        GFToast.showToast('user add successfully!', context,
+            toastDuration: 4, backgroundColor: Colors.green.shade600);
         print("Priority inserted successfully");
       } else {
         throw Exception("Failed to insert priority");
@@ -69,14 +72,24 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> deleteUser(int? usid) async {
+  Future<void> deleteUser(context, int? usid) async {
     try {
       isInsertingUser.value = true;
       final response = await http.get(Uri.parse(
           "https://erm.scarletsystems.com:132/Api/Account/DeleteUser?usid=$usid"));
 
       if (response.statusCode == 200) {
+        GFToast.showToast('user delete successfully!', context,
+            toastDuration: 4, backgroundColor: Colors.green.shade600);
+
         // final List<dynamic> jsonData = json.decode(response.body);
+      } else if (response.statusCode == 400) {
+        print('statuscode:${response.statusCode == 400}');
+        GFToast.showToast(
+            'Unable to Delete Record Due to  Foreign key Constraint', context,
+            toastDuration: 4, backgroundColor: Colors.red.shade600);
+        isInsertingUser.value = false;
+        // Handle foreign key constraint error
       } else {
         throw Exception("Failed to delete data");
       }
@@ -87,6 +100,7 @@ class UserController extends GetxController {
   }
 
   Future<void> updateUser(
+    context,
     loginId,
     usid,
     usPW,
@@ -104,15 +118,24 @@ class UserController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        userPassController.clear();
+        GFToast.showToast('user update successfully!', context,
+            toastDuration: 4, backgroundColor: Colors.green.shade600);
+
         print("user inserted successfully");
+      } else if (response.statusCode == 400) {
+        print('statuscode:${response.statusCode == 400}');
+        GFToast.showToast('Unable to Insert Duplicate Record!', context,
+            toastDuration: 4, backgroundColor: Colors.red.shade600);
+        isInsertingUser.value = false;
+        // Handle foreign key constraint error
       } else {
+        isInsertingUser.value = false;
         throw Exception("Failed to insert user");
       }
     } catch (e) {
-      print("Error: $e");
-    } finally {
-      // Set loading state back to false
       isInsertingUser.value = false;
+      print("Error: $e");
     }
   }
 }

@@ -13,6 +13,9 @@ class GetTaskListModel {
   final String? sTSNAME;
   final String? cOMPDT;
   final String? lOGINID;
+  final String? assignBy;
+  final int? fKDEPT;
+  final String? dEPARTMENT;
 
   GetTaskListModel({
     this.tASKID,
@@ -29,6 +32,9 @@ class GetTaskListModel {
     this.sTSNAME,
     this.cOMPDT,
     this.lOGINID,
+    this.assignBy,
+    this.fKDEPT,
+    this.dEPARTMENT,
   });
 
   GetTaskListModel.fromJson(Map<String, dynamic> json)
@@ -45,7 +51,10 @@ class GetTaskListModel {
         tSTATUS = json['TSTATUS'] as int?,
         sTSNAME = json['STSNAME'] as String?,
         cOMPDT = json['COMPDT'] as String?,
-        lOGINID = json['LOGINID'] as String?;
+        lOGINID = json['LOGINID'] as String?,
+        assignBy = json['AssignBy'] as String?,
+        fKDEPT = json['FKDEPT'] as int?,
+        dEPARTMENT = json['DEPARTMENT'] as String?;
 
   Map<String, dynamic> toJson() => {
         'TASKID': tASKID,
@@ -61,6 +70,9 @@ class GetTaskListModel {
         'TSTATUS': tSTATUS,
         'STSNAME': sTSNAME,
         'COMPDT': cOMPDT,
-        'LOGINID': lOGINID
+        'LOGINID': lOGINID,
+        'AssignBy': assignBy,
+        'FKDEPT': fKDEPT,
+        'DEPARTMENT': dEPARTMENT
       };
 }

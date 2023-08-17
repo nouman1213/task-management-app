@@ -41,6 +41,7 @@ class UserListScreen extends StatelessWidget {
                   if (userController.insertUserController.text.isNotEmpty &&
                       userController.userPassController.text.isNotEmpty) {
                     await userController.insertUser(
+                        context,
                         userController.insertUserController.text,
                         userController.userPassController.text,
                         userController.fkcoid);
@@ -68,9 +69,10 @@ class UserListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           "Users List",
-          style: kTextStyleBoldWhite(18),
+          style: kTextStyleBoldWhite(context, 18),
         ),
       ),
       body: FutureBuilder(
@@ -101,7 +103,7 @@ class UserListScreen extends StatelessWidget {
                                 child: Card(
                                   child: ListTile(
                                     title: Text(user.lOGINID ?? '',
-                                        style: kTextStyleBlack(18)),
+                                        style: kTextStyleBlack(context, 18)),
                                     trailing: Container(
                                       width: 80,
                                       child: Row(
@@ -116,10 +118,15 @@ class UserListScreen extends StatelessWidget {
                                                         .updateUserController
                                                         .text =
                                                     user.lOGINID.toString();
+                                                userController
+                                                    .userPassController
+                                                    .text = user.uSPW!;
                                                 _showUpdateUserDialog(
                                                   context,
                                                   userController
                                                       .updateUserController,
+                                                  userController
+                                                      .userPassController,
                                                   user.uSID,
                                                   user.uSPW,
                                                 );
@@ -180,7 +187,7 @@ class UserListScreen extends StatelessWidget {
                   onPressed: () async {
                     userController.isInsertingUser.value = true;
 
-                    await userController.deleteUser(usid);
+                    await userController.deleteUser(context, usid);
                     userController.fetchUserList();
                     userController.isInsertingUser.value = false;
 
@@ -209,18 +216,23 @@ class UserListScreen extends StatelessWidget {
     );
   }
 
-  void _showUpdateUserDialog(BuildContext context, controller, usid, usPW) {
+  void _showUpdateUserDialog(
+      BuildContext context, nameController, passController, usid, usPW) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Update Task Prirority'),
+            title: Text('Update User'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: controller,
-                  decoration: InputDecoration(labelText: 'Priority Name'),
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'User Name'),
+                ),
+                TextField(
+                  controller: passController,
+                  decoration: InputDecoration(labelText: 'User Password'),
                 ),
                 SizedBox(height: 10),
                 Obx(() {
@@ -236,19 +248,23 @@ class UserListScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   print("Inside onPressed callback");
-                  print("Controller Text: ${controller.text}");
+                  print("Controller Text: ${nameController.text}");
+                  print("Controller Text: ${passController.text}");
                   print("usid: $usid");
-                  print("usPW: $usPW");
+                  // print("usPW: $usPW");
 
-                  if (controller.text.isNotEmpty) {
+                  if (nameController.text.isNotEmpty) {
                     print("Updating user...");
 
                     await userController.updateUser(
-                        controller.text, usid, usPW);
+                        context,
+                        nameController.text,
+                        usid,
+                        userController.userPassController.text);
 
                     userController.fetchUserList();
                     userController.isInsertingUser.value = false;
-                    controller.clear();
+                    nameController.clear();
 
                     Navigator.of(context).pop();
                   }

@@ -39,17 +39,17 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: kTextStyleBlack(20)),
+        Text(label, style: kTextStyleBlack(context, 20)),
         TextField(
           readOnly: readOnly as bool,
           maxLines: label == 'Description' ? 5 : 1,
           controller: controller,
-          style: kTextStyleBoldBlack(18),
+          style: kTextStyleBoldBlack(context, 18),
           onTap: onTap,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(14),
             hintText: hintText,
-            hintStyle: kTextStyleBoldGrey(18),
+            hintStyle: kTextStyleBoldGrey(context, 18),
             suffixIcon: _getRightIcon(),
             border: InputBorder.none,
             enabledBorder: _borders(),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:task_management_app/model/taskmodel.dart';
-import 'package:task_management_app/screens/main_screen.dart';
 import 'package:task_management_app/screens/taskDetails_screen.dart';
 
 import '../components/tasktile.dart';
@@ -18,11 +17,13 @@ class AllTasksScreen extends StatefulWidget {
 class _AllTasksScreenState extends State<AllTasksScreen> {
   final taskController = Get.put(AddTaskController());
   var fkcoid;
+  var usid;
   @override
   void initState() {
     super.initState();
     final box = GetStorage();
     fkcoid = box.read("fkCoid");
+    usid = box.read("usid");
   }
 
   @override
@@ -31,10 +32,10 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
         appBar: AppBar(
           elevation: 0,
           title: Text('All Tasks'),
-          // backgroundColor: Colors.amber[300],
+          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid),
+          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -78,6 +79,8 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                                     padding: const EdgeInsets.all(6.0),
                                     child: TaskTile(
                                       task: Task(
+                                        department: task.dEPARTMENT,
+                                        assignedBy: task.assignBy.toString(),
                                         title: task.tTITLE.toString(),
                                         assignedTo: task.lOGINID.toString(),
                                         details: task.tDTL.toString(),
@@ -125,7 +128,8 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                                       ),
                                       label: Text(
                                         "Create Task",
-                                        style: kTextStyleBoldBlack(16.0),
+                                        style:
+                                            kTextStyleBoldBlack(context, 16.0),
                                       )),
                                 ),
                               ),

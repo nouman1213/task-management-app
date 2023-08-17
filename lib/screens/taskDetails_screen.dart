@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/toast/gf_toast.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/model/task_details_model.dart';
-import 'package:task_management_app/screens/allTask_screen.dart';
-import 'package:task_management_app/screens/home_screen2.dart';
 import 'package:task_management_app/screens/main_screen.dart';
 
 import '../components/button2.dart';
@@ -40,6 +38,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+
         // leading: IconButton(
         //   onPressed: () {
         //     Get.to(() => AllTasksScreen());
@@ -48,7 +48,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         // ),
         // automaticallyImplyLeading: false,
         elevation: 0,
-        title: Text('Task Details', style: kTextStyleBoldWhite(18)),
+        title: Text(
+          'Task Details',
+        ),
         // backgroundColor: Colors.amber[300],
       ),
       body: FutureBuilder<TaskDetailsListModel>(
@@ -83,7 +85,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 children: [
                   Text(
                     taskDetails.tTITLE ?? '',
-                    style: kTextStyleBoldBlack(24),
+                    style: kTextStyleBoldBlack(context, 24),
                   ),
                   kVerticalSpace(25),
                   Row(
@@ -140,10 +142,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     ],
                   ),
                   kVerticalSpace(25),
-                  Text('Details', style: kTextStyleBoldBlack(20.0)),
+                  Text('Details', style: kTextStyleBoldBlack(context, 20.0)),
                   Text(
                     taskDetails.tDTL.toString(),
-                    style: kTextStyleBlack(16.0),
+                    style: kTextStyleBlack(context, 16.0),
                   ),
                   kVerticalSpace(50),
                   CustomButton(
@@ -240,6 +242,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 print('tstatus::${statusContoller.selectedTaskStId}');
                 print('compdate::${widget.taskid}');
 
+                Navigator.pop(context);
+                await Future.delayed(Duration(milliseconds: 1));
                 Get.to(() => MainScreen());
                 GFToast.showToast('Task status update successfully', context);
               },
@@ -269,7 +273,7 @@ class CustomRow extends StatelessWidget {
           color: color,
         ),
         const SizedBox(width: 10),
-        Text(label, style: kTextStyleBlack(18), softWrap: true),
+        Text(label, style: kTextStyleBlack(context, 18), softWrap: true),
       ],
     );
   }

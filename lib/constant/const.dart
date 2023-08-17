@@ -35,42 +35,42 @@ enum TaskStatus {
   const TaskStatus(this.icon, this.color);
 }
 
-TextStyle kTextStyleGrey(double size) {
+TextStyle kTextStyleGrey(context, double size) {
   return GoogleFonts.arimaMadurai(
-    textStyle: TextStyle(fontSize: size, color: Colors.grey),
+    textStyle:
+        TextStyle(fontSize: size, color: Theme.of(context).colorScheme.outline),
   );
 }
 
-TextStyle kTextStyleWhite(double size) {
+TextStyle kTextStyleWhite(context, double size) {
   return GoogleFonts.arimaMadurai(
-    textStyle: TextStyle(fontSize: size, color: Colors.white),
+    textStyle: TextStyle(
+        fontSize: size, color: Theme.of(context).colorScheme.onPrimary),
   );
 }
 
-TextStyle kTextStyleBlack(double size) {
+TextStyle kTextStyleBlack(context, double size) {
+  return GoogleFonts.arimaMadurai(
+    textStyle:
+        TextStyle(fontSize: size, color: Theme.of(context).colorScheme.primary),
+  );
+}
+
+TextStyle kTextStyleBoldGrey(context, double size) {
   return GoogleFonts.arimaMadurai(
     textStyle: TextStyle(
       fontSize: size,
-      color: Colors.black,
-    ),
-  );
-}
-
-TextStyle kTextStyleBoldGrey(double size) {
-  return GoogleFonts.arimaMadurai(
-    textStyle: TextStyle(
-      fontSize: size,
-      color: Colors.grey,
+      color: Theme.of(context).colorScheme.outline,
       fontWeight: FontWeight.bold,
     ),
   );
 }
 
-TextStyle kTextStyleBoldBlack(double size) {
+TextStyle kTextStyleBoldBlack(context, double size) {
   return GoogleFonts.arimaMadurai(
     textStyle: TextStyle(
       fontSize: size,
-      color: Colors.black,
+      color: Theme.of(context).colorScheme.primary,
       fontWeight: FontWeight.bold,
     ),
   );
@@ -88,21 +88,21 @@ TextStyle kTextStyleBoldAmber(double size) {
 
 Color mycolor = Color.fromARGB(255, 22, 34, 70);
 
-TextStyle kTextStyleBoldWhite(double size) {
+TextStyle kTextStyleBoldWhite(context, double size) {
   return GoogleFonts.arimaMadurai(
     textStyle: TextStyle(
       fontSize: size,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.onPrimary,
       fontWeight: FontWeight.bold,
     ),
   );
 }
 
-TextStyle kTextStyleBoldBlack2(double size) {
+TextStyle kTextStyleBoldBlack2(context, double size) {
   return GoogleFonts.orbitron(
     textStyle: TextStyle(
       fontSize: size,
-      color: Colors.grey,
+      color: Theme.of(context).colorScheme.outline,
       fontWeight: FontWeight.bold,
     ),
   );

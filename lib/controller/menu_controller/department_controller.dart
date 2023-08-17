@@ -6,15 +6,16 @@ import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
 
-import '../../model/priority_list_model.dart';
+import '../../model/derpartment_model.dart';
 
-class PriorityContoller extends GetxController {
-  String selectedPriority = 'Select Priority';
-  int selectedPriorityId = -1;
-  RxList<GetPriorityList> priorityList = <GetPriorityList>[].obs;
-  RxBool isInsertingPriority = false.obs;
-  TextEditingController insertPriorityController = TextEditingController();
-  TextEditingController updatePriorityController = TextEditingController();
+class DepartmentContoller extends GetxController {
+  String selectedDepartment = 'Select Department';
+  int selectedDepartmentId = -1;
+  RxList<GetDepartmentListModel> departmentList =
+      <GetDepartmentListModel>[].obs;
+  RxBool isInsertingDepartment = false.obs;
+  TextEditingController insertDepartmentController = TextEditingController();
+  TextEditingController updateDepartmentController = TextEditingController();
   final box = GetStorage();
   var fkcoid;
   @override
@@ -22,18 +23,18 @@ class PriorityContoller extends GetxController {
     super.onInit();
     fkcoid = box.read("fkCoid");
     // print("fckiddd:::$fkcoid");
-    fetchPriorityList();
+    fetchDepartmentList();
   }
 
-  Future<void> fetchPriorityList() async {
+  Future<void> fetchDepartmentList() async {
     try {
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/TaskPriority/GetPriority?coid=$fkcoid"));
+          "https://erm.scarletsystems.com:132/Api/Department/GetDepartment?coid=$fkcoid"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        priorityList.value =
-            jsonData.map((e) => GetPriorityList.fromJson(e)).toList();
+        departmentList.value =
+            jsonData.map((e) => GetDepartmentListModel.fromJson(e)).toList();
       } else {
         throw Exception("Failed to load data from api");
       }
@@ -44,50 +45,50 @@ class PriorityContoller extends GetxController {
   }
 
   // insert priority method
-  Future<void> insertPriority(context, priorityName, fkcoid) async {
+  Future<void> insertDepartment(context, departmentName, fkcoid) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingDepartment.value = true;
       final response = await http.post(
         Uri.parse(
-            "https://erm.scarletsystems.com:132/Api/TaskPriority/InsertPriority"),
+            "https://erm.scarletsystems.com:132/Api/Department/InsertDepartment"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "PRTNAME": priorityName,
+          "DPNAME": departmentName,
           "FKCOID": fkcoid,
         }),
       );
 
       if (response.statusCode == 200) {
-        GFToast.showToast('priority add successfully!', context,
+        GFToast.showToast('department add successfully!', context,
             toastDuration: 4, backgroundColor: Colors.green.shade600);
-        print("Priority inserted successfully");
+        print("department inserted successfully");
       } else if (response.statusCode == 400) {
         print('statuscode:${response.statusCode == 400}');
         GFToast.showToast(
             'Unable to Delete Record Due to  Foreign key Constraint', context,
             toastDuration: 4, backgroundColor: Colors.red.shade600);
-        isInsertingPriority.value = false;
+        isInsertingDepartment.value = false;
         // Handle foreign key constraint error
       } else {
-        isInsertingPriority.value = false;
+        isInsertingDepartment.value = false;
 
-        throw Exception("Failed to insert priority");
+        throw Exception("Failed to insert department");
       }
     } catch (e) {
-      isInsertingPriority.value = false;
+      isInsertingDepartment.value = false;
 
       print("Error: $e");
     }
   }
 
-  Future<void> deletePriority(context, int? prtId) async {
+  Future<void> deleteDepartment(context, int? drtId) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingDepartment.value = true;
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/TaskPriority/DeletePriority?PRTID=$prtId"));
+          "https://erm.scarletsystems.com:132/Api/Department/DeleteDepartment?DPID=$drtId"));
 
       if (response.statusCode == 200) {
-        GFToast.showToast('priority delete successfully!', context,
+        GFToast.showToast('department delete successfully!', context,
             toastDuration: 4, backgroundColor: Colors.green.shade600);
         // final List<dynamic> jsonData = json.decode(response.body);
       } else if (response.statusCode == 400) {
@@ -95,7 +96,7 @@ class PriorityContoller extends GetxController {
         GFToast.showToast(
             'Unable to Delete Record Due to  Foreign key Constraint', context,
             toastDuration: 4, backgroundColor: Colors.red.shade600);
-        isInsertingPriority.value = false;
+        isInsertingDepartment.value = false;
         // Handle foreign key constraint error
       } else {
         throw Exception("Failed to delete data");
@@ -106,36 +107,36 @@ class PriorityContoller extends GetxController {
     }
   }
 
-  Future<void> updatePriority(context, priorityName, fkcoid, prtId) async {
+  Future<void> updateDepartment(context, departmentName, fkcoid, drtId) async {
     try {
-      isInsertingPriority.value = true;
+      isInsertingDepartment.value = true;
       final response = await http.post(
         Uri.parse(
-            "https://erm.scarletsystems.com:132/Api/TaskPriority/UpdatePriority"),
+            "https://erm.scarletsystems.com:132/Api/Department/UpdateDepartment"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "PRTNAME": priorityName,
+          "DPNAME": departmentName,
           "FKCOID": fkcoid,
-          "PRTID": prtId,
+          "DPID": drtId,
         }),
       );
 
       if (response.statusCode == 200) {
-        GFToast.showToast('priority update successfully!', context,
+        GFToast.showToast('department update successfully!', context,
             toastDuration: 4, backgroundColor: Colors.green.shade600);
-        print("Priority inserted successfully");
+        print("department inserted successfully");
       } else if (response.statusCode == 400) {
         print('statuscode:${response.statusCode == 400}');
         GFToast.showToast('Unable to Insert Duplicate Record!', context,
             toastDuration: 4, backgroundColor: Colors.red.shade600);
-        isInsertingPriority.value = false;
+        isInsertingDepartment.value = false;
         // Handle foreign key constraint error
       } else {
-        isInsertingPriority.value = false;
-        throw Exception("Failed to update priority");
+        isInsertingDepartment.value = false;
+        throw Exception("Failed to insert department");
       }
     } catch (e) {
-      isInsertingPriority.value = false;
+      isInsertingDepartment.value = false;
       print("Error: $e");
     }
   }

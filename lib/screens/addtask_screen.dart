@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 import '../components/keybord_hider.dart';
 import '../components/roundbutton.dart';
 import '../constant/const.dart';
+import '../controller/menu_controller/department_controller.dart';
 import '../controller/menu_controller/priority_contoller.dart';
 import '../controller/menu_controller/task_status_controller.dart';
 import '../controller/menu_controller/user_controller.dart';
 import '../controller/task/addTaskController.dart';
-import 'package:getwidget/getwidget.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   @override
@@ -20,9 +20,10 @@ class AddNewTaskScreen extends StatefulWidget {
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final AddTaskController taskController = Get.put(AddTaskController());
 
+  final departmentContoller = Get.put(DepartmentContoller());
   final priorityContoller = Get.put(PriorityContoller());
 
-  final userContoller = Get.put(UserController());
+  final userContoller = Get.find<UserController>();
 
   final statusContoller = Get.put(TaskStatusController());
 
@@ -84,7 +85,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
           elevation: 0,
           title: Text(
             'Add New Task',
-            style: kTextStyleBoldWhite(18),
+            style: kTextStyleBoldWhite(context, 18),
           ),
           backgroundColor: Colors.blue[800],
         ),
@@ -120,10 +121,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         TextFormField(
                           textInputAction: TextInputAction.done,
-                          maxLines: 5,
+                          maxLines: 3,
                           controller: taskController.detailsController,
                           decoration: InputDecoration(
                             labelText: 'Task Details',
@@ -143,7 +144,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Row(
                           children: [
                             Flexible(
@@ -178,7 +179,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                 },
                               ),
                             ),
-                            SizedBox(width: 20),
+                            SizedBox(width: 10),
                             Flexible(
                               child: TextFormField(
                                 textInputAction: TextInputAction.done,
@@ -213,8 +214,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         DropdownButtonFormField<int>(
+                          elevation: 0,
+                          dropdownColor: Colors.blue.shade200,
                           validator: (v) {
                             if (v == null || v == -1) {
                               return 'Select Assign To';
@@ -226,7 +229,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                           items: [
                             DropdownMenuItem<int>(
                               value: -1,
-                              child: Text(userContoller.selectedAssignTo),
+                              child: Text(
+                                userContoller.selectedAssignTo,
+                                style: kTextStyleBoldBlack(context, 16),
+                              ),
                             ),
                             ...userContoller.userList.map((assignTo) {
                               return DropdownMenuItem<int>(
@@ -251,8 +257,54 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         DropdownButtonFormField<int>(
+                          elevation: 0,
+                          dropdownColor: Colors.blue.shade200,
+                          validator: (v) {
+                            if (v == null || v == -1) {
+                              return 'Select Department';
+                            } else {
+                              return null;
+                            }
+                          },
+                          value: departmentContoller.selectedDepartmentId,
+                          items: [
+                            DropdownMenuItem<int>(
+                              value: -1,
+                              child: Text(
+                                departmentContoller.selectedDepartment,
+                                style: kTextStyleBoldBlack(context, 16),
+                              ),
+                            ),
+                            ...departmentContoller.departmentList
+                                .map((department) {
+                              return DropdownMenuItem<int>(
+                                value: department.dPID!,
+                                child: Text(department.dPNAME ?? ''),
+                              );
+                            }).toList(),
+                          ],
+                          onChanged: (value) {
+                            departmentContoller.selectedDepartmentId = value!;
+                            print(
+                                " dropdownValue::::::${departmentContoller.selectedDepartmentId = value}");
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Department',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.blue.withOpacity(0.3),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<int>(
+                          elevation: 0,
+                          dropdownColor: Colors.blue.shade200,
                           validator: (v) {
                             if (v == null || v == -1) {
                               return 'Select priority';
@@ -265,7 +317,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             DropdownMenuItem<int>(
                               value:
                                   -1, // -1 to represent "Please select priority"
-                              child: Text(priorityContoller.selectedPriority),
+                              child: Text(
+                                priorityContoller.selectedPriority,
+                                style: kTextStyleBoldBlack(context, 16),
+                              ),
                             ),
                             ...priorityContoller.priorityList.map((priority) {
                               return DropdownMenuItem<int>(
@@ -290,8 +345,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         DropdownButtonFormField<int>(
+                          elevation: 0,
+                          dropdownColor: Colors.blue.shade200,
                           validator: (v) {
                             if (v == null || v == -1) {
                               return 'Select Status';
@@ -304,7 +361,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             DropdownMenuItem<int>(
                               value:
                                   -1, // -1 to represent "Please select priority"
-                              child: Text(statusContoller.selectedTaskStatus),
+                              child: Text(
+                                statusContoller.selectedTaskStatus,
+                                style: kTextStyleBoldBlack(context, 16),
+                              ),
                             ),
                             ...statusContoller.taskStatusList.map((status) {
                               return DropdownMenuItem<int>(
@@ -329,7 +389,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 30),
                         RoundButton(
                           title: "Add Task",
                           onTap: () {
@@ -346,10 +406,13 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                 context: context,
                                 compdt: formattedDate,
                                 tstatus: statusContoller.selectedTaskStId,
+                                department:
+                                    departmentContoller.selectedDepartmentId,
                               );
                               priorityContoller.selectedPriorityId = -1;
                               userContoller.selectedAssignId = -1;
                               statusContoller.selectedTaskStId = -1;
+                              departmentContoller.selectedDepartmentId = -1;
                             }
                           },
                           backgroundColor: Colors.blue[800],

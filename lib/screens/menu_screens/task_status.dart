@@ -38,6 +38,7 @@ class TaskStatusScreen extends StatelessWidget {
                 onPressed: () async {
                   if (statusController.insertStatusController.text.isNotEmpty) {
                     await statusController.insertTaskStatus(
+                        context,
                         statusController.insertStatusController.text,
                         statusController.fkcoid);
                     statusController.fetchTaskStatusList();
@@ -95,6 +96,7 @@ class TaskStatusScreen extends StatelessWidget {
                     print("Updating status...");
 
                     await statusController.updateTaskStatus(
+                      context,
                       stsId,
                       controller.text,
                       statusController.fkcoid,
@@ -124,9 +126,10 @@ class TaskStatusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           "Task Status List",
-          style: kTextStyleBoldWhite(18),
+          style: kTextStyleBoldWhite(context, 18),
         ),
       ),
       body: FutureBuilder(
@@ -160,7 +163,7 @@ class TaskStatusScreen extends StatelessWidget {
                                 child: Card(
                                   child: ListTile(
                                     title: Text(status.sTSNAME ?? "",
-                                        style: kTextStyleBlack(18)),
+                                        style: kTextStyleBlack(context, 18)),
                                     trailing: Container(
                                       width: 80,
                                       child: Row(
@@ -238,7 +241,7 @@ class TaskStatusScreen extends StatelessWidget {
               actions: [
                 ElevatedButton(
                   onPressed: () async {
-                    await statusController.deleteTaskStatus(stsid);
+                    await statusController.deleteTaskStatus(context, stsid);
                     statusController.isInsertingStatus.value = true;
                     statusController.fetchTaskStatusList();
                     statusController.isInsertingStatus.value = false;

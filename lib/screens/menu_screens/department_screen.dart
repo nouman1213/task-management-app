@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/components/roundbutton.dart';
+import 'package:task_management_app/controller/menu_controller/department_controller.dart';
 
 import '../../constant/const.dart';
-import '../../controller/menu_controller/priority_contoller.dart';
 
-class TaskPriorityScreen extends StatelessWidget {
-  TaskPriorityScreen({super.key});
-  final priorityController = Get.put(PriorityContoller());
-  void _showAddPriorityDialog(
+class DepartmentScreen extends StatelessWidget {
+  DepartmentScreen({super.key});
+  final departmentController = Get.put(DepartmentContoller());
+  void _showAddDepartmentDialog(
     BuildContext context,
   ) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Add Task Prirority'),
+            title: Text('Add Task Department'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: priorityController.insertPriorityController,
-                  decoration: InputDecoration(labelText: 'Priority Name'),
+                  controller: departmentController.insertDepartmentController,
+                  decoration: InputDecoration(labelText: 'Department Name'),
                 ),
                 SizedBox(height: 10),
                 Obx(() {
-                  if (priorityController.isInsertingPriority.value) {
+                  if (departmentController.isInsertingDepartment.value) {
                     return CircularProgressIndicator();
                   } else {
                     return SizedBox.shrink();
@@ -36,15 +36,15 @@ class TaskPriorityScreen extends StatelessWidget {
             actions: [
               ElevatedButton(
                 onPressed: () async {
-                  if (priorityController
-                      .insertPriorityController.text.isNotEmpty) {
-                    await priorityController.insertPriority(
+                  if (departmentController
+                      .insertDepartmentController.text.isNotEmpty) {
+                    await departmentController.insertDepartment(
                         context,
-                        priorityController.insertPriorityController.text,
-                        priorityController.fkcoid);
-                    priorityController.fetchPriorityList();
-                    priorityController.isInsertingPriority.value = false;
-                    priorityController.insertPriorityController.clear();
+                        departmentController.insertDepartmentController.text,
+                        departmentController.fkcoid);
+                    departmentController.fetchDepartmentList();
+                    departmentController.isInsertingDepartment.value = false;
+                    departmentController.insertDepartmentController.clear();
 
                     Navigator.of(context).pop();
                   }
@@ -62,22 +62,22 @@ class TaskPriorityScreen extends StatelessWidget {
         });
   }
 
-  void _showUpdatePriorityDialog(BuildContext context, controller, prtId) {
+  void _showUpdateDepartmentDialog(BuildContext context, controller, dprtId) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Update Task Prirority'),
+            title: Text('Update Task Department'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(labelText: 'Priority Name'),
+                  decoration: InputDecoration(labelText: 'Department Name'),
                 ),
                 SizedBox(height: 10),
                 Obx(() {
-                  if (priorityController.isInsertingPriority.value) {
+                  if (departmentController.isInsertingDepartment.value) {
                     return CircularProgressIndicator();
                   } else {
                     return SizedBox.shrink();
@@ -90,19 +90,19 @@ class TaskPriorityScreen extends StatelessWidget {
                 onPressed: () async {
                   print("Inside onPressed callback");
                   print("Controller Text: ${controller.text}");
-                  print("FKCOID: ${priorityController.fkcoid}");
-                  print("PRTID: $prtId");
+                  print("FKCOID: ${departmentController.fkcoid}");
+                  print("DPRTID: $dprtId");
 
                   if (controller.text.isNotEmpty) {
                     print("Updating priority...");
 
-                    await priorityController.updatePriority(context,
-                        controller.text, priorityController.fkcoid, prtId);
+                    await departmentController.updateDepartment(context,
+                        controller.text, departmentController.fkcoid, dprtId);
 
                     print("Priority update completed.");
 
-                    priorityController.fetchPriorityList();
-                    priorityController.isInsertingPriority.value = false;
+                    departmentController.fetchDepartmentList();
+                    departmentController.isInsertingDepartment.value = false;
                     controller.clear();
 
                     Navigator.of(context).pop();
@@ -127,12 +127,12 @@ class TaskPriorityScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
-          "Task Priority List",
+          "Task Department List",
           style: kTextStyleBoldWhite(context, 18),
         ),
       ),
       body: FutureBuilder(
-        future: priorityController.fetchPriorityList(),
+        future: departmentController.fetchDepartmentList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -145,23 +145,24 @@ class TaskPriorityScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Obx(() => priorityController.priorityList.isNotEmpty
+                  Obx(() => departmentController.departmentList.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
                             key: UniqueKey(),
-                            itemCount: priorityController.priorityList.length,
+                            itemCount:
+                                departmentController.departmentList.length,
                             itemBuilder: (BuildContext context, int index) {
-                              final priority =
-                                  priorityController.priorityList[index];
+                              final department =
+                                  departmentController.departmentList[index];
                               return GestureDetector(
                                 onTap: () {
-                                  if (priority.pRTID != null) {
-                                    print(priority.pRTID);
+                                  if (department.dPID != null) {
+                                    print(department.dPID);
                                   }
                                 },
                                 child: Card(
                                   child: ListTile(
-                                    title: Text(priority.pRTNAME ?? "",
+                                    title: Text(department.dPNAME ?? "",
                                         style: kTextStyleBlack(context, 18)),
                                     trailing: Container(
                                       width: 80,
@@ -173,15 +174,16 @@ class TaskPriorityScreen extends StatelessWidget {
                                             width: 40,
                                             child: IconButton(
                                               onPressed: () {
-                                                priorityController
-                                                        .updatePriorityController
+                                                departmentController
+                                                        .updateDepartmentController
                                                         .text =
-                                                    priority.pRTNAME.toString();
-                                                _showUpdatePriorityDialog(
+                                                    department.dPNAME
+                                                        .toString();
+                                                _showUpdateDepartmentDialog(
                                                     context,
-                                                    priorityController
-                                                        .updatePriorityController,
-                                                    priority.pRTID);
+                                                    departmentController
+                                                        .updateDepartmentController,
+                                                    department.dPID);
                                               },
                                               icon: Icon(Icons.edit,
                                                   color: Colors.green),
@@ -191,8 +193,8 @@ class TaskPriorityScreen extends StatelessWidget {
                                             width: 40,
                                             child: IconButton(
                                               onPressed: () {
-                                                _showDeletePriorityDialog(
-                                                    context, priority.pRTID);
+                                                _showDeleteDepartmentDialog(
+                                                    context, department.dPID);
                                               },
                                               icon: Icon(Icons.delete,
                                                   color: Colors.red),
@@ -211,9 +213,9 @@ class TaskPriorityScreen extends StatelessWidget {
                   RoundButton(
                       width: 200,
                       backgroundColor: Colors.green.shade500,
-                      title: "Add Task Priority",
+                      title: "Add Task Department",
                       onTap: () {
-                        _showAddPriorityDialog(
+                        _showAddDepartmentDialog(
                           context,
                         );
                       })
@@ -226,7 +228,7 @@ class TaskPriorityScreen extends StatelessWidget {
     );
   }
 
-  void _showDeletePriorityDialog(BuildContext context, int? prtId) {
+  void _showDeleteDepartmentDialog(BuildContext context, int? dprtId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -234,19 +236,22 @@ class TaskPriorityScreen extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             AlertDialog(
-              title: Text('Delete Company'),
-              content: Text('Are you sure you want to delete this priority?'),
+              title: Text('Delete Department'),
+              content: Text('Are you sure you want to delete this department?'),
               actions: [
                 ElevatedButton(
                   onPressed: () async {
-                    await priorityController.deletePriority(context, prtId);
-                    priorityController.isInsertingPriority.value = true;
-                    priorityController.fetchPriorityList();
-                    priorityController.isInsertingPriority.value = false;
+                    await departmentController.deleteDepartment(
+                        context, dprtId);
+                    departmentController.isInsertingDepartment.value = true;
+                    departmentController.fetchDepartmentList();
+                    departmentController.isInsertingDepartment.value = false;
 
                     Navigator.of(context).pop();
                   },
-                  child: Text('Delete'),
+                  child: Text(
+                    'Delete',
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
@@ -257,7 +262,7 @@ class TaskPriorityScreen extends StatelessWidget {
               ],
             ),
             Obx(() {
-              if (priorityController.isInsertingPriority.value) {
+              if (departmentController.isInsertingDepartment.value) {
                 return CircularProgressIndicator();
               } else {
                 return SizedBox.shrink();

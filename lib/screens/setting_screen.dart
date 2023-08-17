@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sizer/sizer.dart';
+import 'package:task_management_app/notification_services.dart/notif_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,6 +13,21 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   var isReminderEnabled = false;
+  final _box = GetStorage();
+
+  final _key = 'isDarkMode';
+
+  ThemeMode get theme => _loadThemeFromBox() ? ThemeMode.dark : ThemeMode.light;
+
+  bool _loadThemeFromBox() => _box.read(_key) ?? false;
+
+  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
+
+  void switchTheme() {
+    Get.changeThemeMode(_loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
+    _saveThemeToBox(!_loadThemeFromBox());
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +37,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(
           'Settings',
         ),
-        // backgroundColor: Colors.amber[300],
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       ),
       body: Padding(
         padding: EdgeInsets.all(1.h),
         child: Column(
           children: [
+            SwitchListTile(
+                title: Text(
+                  'Change Theme',
+                  // color: blackColor,
+                ),
+                value: theme == ThemeMode.dark,
+                onChanged: (v) => switchTheme()),
             ListTile(
                 title: Text('Reminder'),
                 trailing: Switch(
@@ -39,6 +63,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // SizedBox(height: 1.h),
             ListTile(
                 title: Text('Reminder me  before'), trailing: Text('15 mins')),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       NotificationService().simpleNotificationShow();
+            //     },
+            //     child: Text("Show notifiaction")),
           ],
         ),
       ),

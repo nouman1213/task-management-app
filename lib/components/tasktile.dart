@@ -26,16 +26,45 @@ class TaskTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Assign To : ',
+                          style: kTextStyleBoldBlack(context, 14)),
+                      TextSpan(
+                          text: '${task.assignedTo.toString()}',
+                          style: kTextStyleBlack(context, 14)),
+                    ])),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Assign By : ',
+                          style: kTextStyleBoldBlack(context, 14)),
+                      TextSpan(
+                          text: '${task.assignedBy.toString()}',
+                          style: kTextStyleBlack(context, 14)),
+                    ])),
+                  ],
+                ),
+                Text(
+                  // "This is Title",
+                  task.title.toString(),
+                  style: kTextStyleBoldBlack(context, 17),
+                  softWrap: false,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
                       // "This is Title",
-                      task.title.toString(),
-                      style: kTextStyleBoldBlack(20),
+                      task.department.toString(),
+                      style: kTextStyleBlack(context, 14),
                       softWrap: false,
                     ),
                     Text(
                       // "This is Title",
                       task.priority.toString(),
-                      style: kTextStyleBlack(16),
+                      style: kTextStyleBlack(context, 14),
                       softWrap: false,
                     ),
                   ],
@@ -47,13 +76,13 @@ class TaskTile extends StatelessWidget {
                       children: [
                         Text(
                           "Start Date",
-                          style: kTextStyleBlack(14),
+                          style: kTextStyleBlack(context, 14),
                           maxLines: 2,
                         ),
                         Text(
                           task.startDate.toString(),
                           // "details",
-                          style: kTextStyleBlack(15),
+                          style: kTextStyleBlack(context, 14),
                           maxLines: 2,
                         ),
                       ],
@@ -62,13 +91,13 @@ class TaskTile extends StatelessWidget {
                       children: [
                         Text(
                           "End Date",
-                          style: kTextStyleBlack(14),
+                          style: kTextStyleBlack(context, 14),
                           maxLines: 2,
                         ),
                         Text(
                           task.endDate.toString(),
                           // "details",
-                          style: kTextStyleBlack(15),
+                          style: kTextStyleBlack(context, 14),
                           maxLines: 2,
                         ),
                       ],
@@ -81,7 +110,7 @@ class TaskTile extends StatelessWidget {
                     child: Text(
                         // "assign to me",
                         task.details.toString(),
-                        style: kTextStyleBlack(15)),
+                        style: kTextStyleBlack(context, 14)),
                   ),
                 ),
               ],
@@ -97,7 +126,7 @@ class TaskTile extends StatelessWidget {
               child: Text(
                 task.status.toString(),
                 // "02-03-17",
-                style: kTextStyleBoldBlack(20),
+                style: kTextStyleBoldBlack(context, 16),
               ),
             ),
           ),

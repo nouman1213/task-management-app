@@ -5,6 +5,8 @@ class Task {
   final String endDate;
   final String priority;
   final String assignedTo;
+  final String? assignedBy;
+  final String? department;
   final String status;
 
   Task(
@@ -14,5 +16,7 @@ class Task {
       required this.endDate,
       required this.priority,
       required this.assignedTo,
-      required this.status});
+      required this.status,
+      this.department,
+      this.assignedBy});
 }

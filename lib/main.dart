@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sizer/sizer.dart';
-import 'package:task_management_app/controller/task/addTaskController.dart';
+import 'package:task_management_app/notification_services.dart/notif_service.dart';
 import 'package:task_management_app/splash_screen.dart';
 
-import 'controller/task/taskAssignToMeController.dart';
+import 'components/appTheme/theme.dart';
+import 'components/appTheme/theme_manger.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Get.put(TaskAssignedToMeController());
-  // Get.put(AddTaskController());
+  NotificationService().initNotification();
+  await GetStorage.init();
 
   runApp(Sizer(builder: (context, orientation, deviceType) {
     return MyApp();
@@ -24,13 +26,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: Themes.light,
+      darkTheme: Themes.dark,
+      themeMode: ThemeManager().theme,
       home: SplashScreen(),
-      // home: MainScreen(),
-      initialBinding: BindingsBuilder(() {
-        Get.lazyPut<TaskAssignedToMeController>(
-            () => TaskAssignedToMeController());
-      }),
     );
   }
 }

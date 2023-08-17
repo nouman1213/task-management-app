@@ -61,9 +61,10 @@ class CompanyListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           "Company List",
-          style: kTextStyleBoldWhite(18),
+          style: kTextStyleBoldWhite(context, 18),
         ),
       ),
       body: FutureBuilder(
@@ -94,7 +95,7 @@ class CompanyListScreen extends StatelessWidget {
                               child: Card(
                                 child: ListTile(
                                   title: Text(company.cONAME ?? '',
-                                      style: kTextStyleBlack(18)),
+                                      style: kTextStyleBlack(context, 18)),
                                   trailing: IconButton(
                                     icon: Icon(
                                       Icons.delete,

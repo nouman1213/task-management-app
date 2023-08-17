@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
+import 'package:task_management_app/notification_services.dart/notif_service.dart';
 
 import '../../model/get_tasklist_model.dart';
+import '../menu_controller/user_controller.dart';
 
 class AddTaskController extends GetxController {
   final TextEditingController titleController = TextEditingController();
@@ -16,8 +18,10 @@ class AddTaskController extends GetxController {
   RxList<GetTaskListModel> allTaskList = <GetTaskListModel>[].obs;
   RxBool isTaskLoading = false.obs;
   List<GetTaskListModel> todoTaskList = [];
+  List<GetTaskListModel> inProcessTaskList = [];
+  List<GetTaskListModel> completedTaskList = [];
 
-  Future<void> fetchAllTaskList({required fkcoid}) async {
+  Future<void> fetchAllTaskList({required fkcoid, required userid}) async {
     if (fkcoid == null) {
       print("fkCoid is null, cannot make API call");
       return;
@@ -25,7 +29,7 @@ class AddTaskController extends GetxController {
 
     try {
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/Task/GetTaskList?coid=$fkcoid"));
+          "https://erm.scarletsystems.com:132/Api/Task/GetTaskList?coid=$fkcoid&usid=$userid"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
@@ -37,6 +41,24 @@ class AddTaskController extends GetxController {
           GetTaskListModel task = GetTaskListModel.fromJson(taskJson);
           if (task.sTSNAME == 'To do') {
             todoTaskList.add(task);
+          }
+        }
+        inProcessTaskList.clear();
+
+        // Loop through tasks and filter tasks with status 'in process'
+        for (var taskJson in jsonData) {
+          GetTaskListModel task = GetTaskListModel.fromJson(taskJson);
+          if (task.sTSNAME == 'In process') {
+            inProcessTaskList.add(task);
+          }
+        }
+        completedTaskList.clear();
+
+        // Loop through tasks and filter tasks with status 'To do'
+        for (var taskJson in jsonData) {
+          GetTaskListModel task = GetTaskListModel.fromJson(taskJson);
+          if (task.sTSNAME == 'Completed') {
+            completedTaskList.add(task);
           }
         }
         allTaskList.value =
@@ -63,6 +85,7 @@ class AddTaskController extends GetxController {
     required context,
     required tstatus,
     required compdt,
+    required department,
   }) async {
     try {
       isTaskLoading.value = true;
@@ -79,20 +102,42 @@ class AddTaskController extends GetxController {
           "FKPRT": priority,
           "TOUSID": assignto,
           "TSTATUS": tstatus,
-          "COMPDT": compdt
+          "COMPDT": compdt,
+          "FKDEPT": department,
         }),
       );
 
       if (response.statusCode == 200) {
+        // final userController = Get.find<UserController>();
+        // After inserting the task successfully, schedule a notification for the assigned user
+        // if (assignto != -1) {
+        //   bool isAssignedUserFound = userController.userList.any(
+        //     (user) => user.uSID == assignto,
+        //   );
+        //   if (isAssignedUserFound) {
+        //     await NotificationService().scheduleNotification(
+        //       assignto,
+        //       "New Task Assigned",
+        //       "You have been assigned a new task: $tittle",
+        //     );
+        //   }
+        // }
         final box = GetStorage();
         fkcoid = box.read("fkCoid");
 
         print("Task inserted successfully");
         _clearController();
         GFToast.showToast('Task added successfully', context);
-        fetchAllTaskList(fkcoid: null);
+        fetchAllTaskList(fkcoid: fkcoid, userid: usid);
 
         isTaskLoading.value = false;
+      } else if (response.statusCode == 400) {
+        print('statuscode:${response.statusCode == 400}');
+        GFToast.showToast(
+            "Failed to add task ! error :${response.statusCode}", context,
+            toastDuration: 4, backgroundColor: Colors.red.shade600);
+        isTaskLoading.value = false;
+        // Handle foreign key constraint error
       } else {
         isTaskLoading.value = false;
 

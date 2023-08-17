@@ -34,7 +34,8 @@ class TaskStatusContainer extends StatelessWidget {
           ),
           // ),
           kVerticalSpace(10),
-          Text('${status.name.capitalize}', style: kTextStyleBoldBlack(18))
+          Text('${status.name.capitalize}',
+              style: kTextStyleBoldBlack(context, 18))
         ],
       ),
     );

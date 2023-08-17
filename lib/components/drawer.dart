@@ -9,6 +9,7 @@ import 'package:task_management_app/screens/auth_screen/login_screen.dart';
 import 'package:task_management_app/screens/menu_screens/task_status.dart';
 import 'package:task_management_app/screens/setting_screen.dart';
 
+import '../screens/menu_screens/department_screen.dart';
 import '../screens/menu_screens/task_priority.dart';
 import '../screens/menu_screens/user_list.dart';
 
@@ -64,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onPrimary,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -73,7 +74,7 @@ class _MyDrawerState extends State<MyDrawer> {
               child: UserAccountsDrawerHeader(
                 currentAccountPictureSize: Size.square(80),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade600,
+                  color: Theme.of(context).colorScheme.inverseSurface,
                 ),
                 margin: EdgeInsets.zero,
                 accountName: Text(
@@ -86,7 +87,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 // currentAccountPicture: Image.network(imageUrl),
                 currentAccountPicture: CircleAvatar(
-                  // backgroundColor: Color.fromARGB(255, 51, 80, 165),
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   // radius: 20,
                   child: Icon(Icons.person),
                 ),
@@ -102,7 +103,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         builder: (context) => AddNewTaskScreen()));
               },
               leading: Icon(
-                CupertinoIcons.today,
+                Icons.add_alarm_rounded,
                 // color: Colors.white,
               ),
               title: Text(
@@ -112,6 +113,31 @@ class _MyDrawerState extends State<MyDrawer> {
 
                     // color: Colors.white,
                     fontSize: 11.sp),
+              ),
+            ),
+            Visibility(
+              visible: fkroll == 'Admin',
+              child: ListTile(
+                onTap: () async {
+                  Navigator.pop(context);
+                  await Future.delayed(Duration(milliseconds: 1));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DepartmentScreen()));
+                },
+                leading: Icon(
+                  Icons.account_balance_outlined,
+                  // color: Colors.white,
+                ),
+                title: Text(
+                  "Task Department",
+                  textScaleFactor: 1.1,
+                  style: TextStyle(
+
+                      // color: Colors.white,
+                      fontSize: 11.sp),
+                ),
               ),
             ),
             Visibility(
@@ -126,7 +152,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           builder: (context) => TaskPriorityScreen()));
                 },
                 leading: Icon(
-                  CupertinoIcons.book,
+                  Icons.add_chart,
                   // color: Colors.white,
                 ),
                 title: Text(
@@ -151,7 +177,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           builder: (context) => TaskStatusScreen()));
                 },
                 leading: Icon(
-                  CupertinoIcons.book_fill,
+                  Icons.add_moderator_outlined,
                   // color: Colors.white,
                 ),
                 title: Text(

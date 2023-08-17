@@ -6,10 +6,8 @@ import 'package:getwidget/getwidget.dart';
 import 'package:task_management_app/components/drawer.dart';
 
 import '../constant/const.dart';
+import '../controller/menu_controller/user_controller.dart';
 import '../controller/task/addTaskController.dart';
-import '../controller/task/taskAssignToMeController.dart';
-import '../model/get_tasklist_model.dart';
-import '../model/taskmodel.dart';
 import 'allTask_screen.dart';
 import 'taskAssignedToMe.dart';
 import 'task_status/completed_task.dart';
@@ -28,15 +26,19 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var fkcoid;
+  var usid;
   @override
   void initState() {
     super.initState();
     final box = GetStorage();
     fkcoid = box.read("fkCoid");
+    usid = box.read("usid");
   }
 
   @override
   Widget build(BuildContext context) {
+    Get.put(UserController());
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: MyDrawer(),
@@ -46,7 +48,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
       // ),
       body: FutureBuilder(
         future: taskController.fetchAllTaskList(
-            fkcoid: fkcoid), // Initialize AddTaskController
+            fkcoid: fkcoid, userid: usid), // Initialize AddTaskController
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -65,10 +67,12 @@ class _HomeScreen2State extends State<HomeScreen2> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GFAvatar(
-                          backgroundColor: Colors.blue.shade50,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
                           radius: 30,
                           child: Icon(
                             CupertinoIcons.person,
+                            color: Theme.of(context).colorScheme.primary,
                             size: 40,
                           ),
                         ),
@@ -77,43 +81,51 @@ class _HomeScreen2State extends State<HomeScreen2> {
                           children: [
                             Text(
                               'User',
-                              style: kTextStyleBoldBlack(24.0),
+                              style: kTextStyleBoldBlack(context, 24.0),
                             ),
                             Text(
                               'Project Manger',
-                              style: kTextStyleBlack(16.0),
+                              style: kTextStyleBlack(context, 16.0),
                             ),
                           ],
                         ),
                         kHorizontleSpace(50.0),
                         GFAvatar(
-                          backgroundColor: Colors.blue.shade900,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
                           child: IconButton(
                             onPressed: () {
                               _scaffoldKey.currentState?.openDrawer();
                             },
                             icon: Icon(Icons.menu),
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ],
                     ),
                     kVerticalSpace(20.0),
                     TextField(
+                      enabled: false,
                       decoration: InputDecoration(
                           hintText: 'search...',
-                          prefixIcon: Icon(Icons.search),
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(30)),
-                          fillColor: Colors.deepPurple.shade50,
+                          fillColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
                           filled: true,
                           isDense: true),
                     ),
                     kVerticalSpace(10.0),
                     Text(
                       'Projects',
-                      style: kTextStyleBoldBlack(24.0),
+                      style: kTextStyleBoldBlack(context, 24.0),
                     ),
                     kVerticalSpace(5.0),
                     Row(
@@ -127,7 +139,9 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             height: 150,
                             width: 150,
                             decoration: BoxDecoration(
-                                color: Colors.green.shade900,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
                                 borderRadius: BorderRadius.circular(12.0)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -136,8 +150,9 @@ class _HomeScreen2State extends State<HomeScreen2> {
                                 children: [
                                   Text(
                                       '${taskController.allTaskList.length} Task',
-                                      style: kTextStyleWhite(16)),
-                                  Text('All Tasks', style: kTextStyleWhite(22)),
+                                      style: kTextStyleWhite(context, 16)),
+                                  Text('All Tasks',
+                                      style: kTextStyleWhite(context, 22)),
                                   // Text('August 2023', style: kTextStyleWhite(16)),
                                 ],
                               ),
@@ -146,28 +161,26 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            List<Task> assignedTasks =
-                                Get.find<TaskAssignedToMeController>()
-                                    .taskToAssignedMe
-                                    .toList();
-                            Get.to(() => TaskAssignedToMeScreen(
-                                  tasks: assignedTasks,
-                                ));
+                            Get.to(() => TaskAssignedToMeScreen());
                           },
                           child: Container(
                             height: 150,
                             width: 150,
                             decoration: BoxDecoration(
-                                color: Colors.red.shade900,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
                                 borderRadius: BorderRadius.circular(12.0)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('0 Task', style: kTextStyleWhite(16)),
+                                  Text(
+                                      '${taskController.allTaskList.length} Task',
+                                      style: kTextStyleWhite(context, 16)),
                                   Text('Assign To Me',
-                                      style: kTextStyleWhite(22)),
+                                      style: kTextStyleWhite(context, 22)),
                                   // Text('August 2023', style: kTextStyleWhite(16)),
                                 ],
                               ),
@@ -179,7 +192,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                     kVerticalSpace(10.0),
                     Text(
                       'My Tasks',
-                      style: kTextStyleBoldBlack(24.0),
+                      style: kTextStyleBoldBlack(context, 24.0),
                     ),
                     // kVerticalSpace(10.0),
                     GFListTile(
@@ -187,53 +200,60 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         Get.to(() => ToDoScreen());
                       },
                       shadow: BoxShadow(),
-                      color: Colors.grey.shade50,
+                      color: Theme.of(context).colorScheme.onSecondary,
                       avatar: GFAvatar(
-                        backgroundColor: Colors.purple.shade800,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.assessment,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
-                      titleText: 'Todo',
+                      titleText: 'Todo Task',
                       subTitle: Text(
-                          '${taskController.todoTaskList.length} Task  - 0 Started'),
+                        '${taskController.todoTaskList.length} Task',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                     ),
                     GFListTile(
                       onTap: () {
-                        // Get.to(() => InProgressScreen(
-                        //       addTaskController: _addTaskController,
-                        //     ));
+                        Get.to(() => InProgressScreen());
                       },
                       shadow: BoxShadow(),
-                      color: Colors.grey.shade50,
+                      color: Theme.of(context).colorScheme.onSecondary,
                       avatar: GFAvatar(
-                        backgroundColor: Colors.purple.shade800,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.incomplete_circle,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
-                      titleText: 'On Progress',
-                      subTitle: Text('0 Task  - 0 Progress'),
+                      titleText: 'In Process Task',
+                      subTitle: Text(
+                        '${taskController.inProcessTaskList.length} Task',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                     ),
                     GFListTile(
                       onTap: () {
-                        // Get.to(() => CompletedScreen(
-                        //       addTaskController: _addTaskController,
-                        //     ));
+                        Get.to(() => CompletedScreen());
                       },
                       shadow: BoxShadow(),
-                      color: Colors.grey.shade50,
+                      color: Theme.of(context).colorScheme.onSecondary,
                       avatar: GFAvatar(
-                        backgroundColor: Colors.purple.shade800,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.done,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
-                      titleText: 'Done',
-                      subTitle: Text('0 Task  - 0 Done'),
+                      titleText: 'Completed Task',
+                      subTitle: Text(
+                        '${taskController.completedTaskList.length} Task',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                     ),
                   ],
                 ),

@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (iconData == null) Container() else Icon(iconData),
-            Text(label, style: kTextStyleBoldBlack(16))
+            Text(label, style: kTextStyleBoldBlack(context, 16))
           ],
         ),
       ),

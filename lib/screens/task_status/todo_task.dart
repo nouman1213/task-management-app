@@ -16,11 +16,13 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   final AddTaskController taskController = AddTaskController();
   var fkcoid;
+  var usid;
   @override
   void initState() {
     super.initState();
     final box = GetStorage();
     fkcoid = box.read("fkCoid");
+    usid = box.read("usid");
   }
 
   @override
@@ -32,7 +34,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
           title: Text('To Do Tasks'),
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid),
+          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

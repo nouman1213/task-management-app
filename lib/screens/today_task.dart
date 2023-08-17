@@ -41,7 +41,7 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.blue[900],
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text("Today Task"),
@@ -78,7 +78,7 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
                 if (tasks.isEmpty) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
