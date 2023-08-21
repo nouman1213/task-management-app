@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
-import 'package:task_management_app/notification_services.dart/notif_service.dart';
 
 import '../../model/get_tasklist_model.dart';
+import '../../model/tasl_assignedToMe_model.dart';
+import '../../notification_services.dart/notif_service.dart';
 import '../menu_controller/user_controller.dart';
 
 class AddTaskController extends GetxController {
@@ -16,12 +17,15 @@ class AddTaskController extends GetxController {
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   RxList<GetTaskListModel> allTaskList = <GetTaskListModel>[].obs;
+  RxList<GetTaskListModel> filterdTaskList = <GetTaskListModel>[].obs;
+  RxList<TaskAssignedToMeModel> TaskAssignedMeList =
+      <TaskAssignedToMeModel>[].obs;
   RxBool isTaskLoading = false.obs;
   List<GetTaskListModel> todoTaskList = [];
   List<GetTaskListModel> inProcessTaskList = [];
   List<GetTaskListModel> completedTaskList = [];
 
-  Future<void> fetchAllTaskList({required fkcoid, required userid}) async {
+  Future<void> fetchFilterdTaskList({required fkcoid, required userid}) async {
     if (fkcoid == null) {
       print("fkCoid is null, cannot make API call");
       return;
@@ -29,7 +33,7 @@ class AddTaskController extends GetxController {
 
     try {
       final response = await http.get(Uri.parse(
-          "https://erm.scarletsystems.com:132/Api/Task/GetTaskList?coid=$fkcoid&usid=$userid"));
+          "https://erm.scarletsystems.com:132/Api/Task/GetTaskSplitList?coid=$fkcoid&usid=$userid"));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
@@ -63,6 +67,57 @@ class AddTaskController extends GetxController {
         }
         allTaskList.value =
             jsonData.map((e) => GetTaskListModel.fromJson(e)).toList();
+        print("api hit successfully${response.statusCode}");
+      } else {
+        throw Exception("Failed to load data from api");
+      }
+    } catch (e) {
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> fetchAllTaskList({required fkcoid, required userid}) async {
+    if (fkcoid == null) {
+      print("fkCoid is null, cannot make API call");
+      return;
+    }
+
+    try {
+      final response = await http.get(Uri.parse(
+          "https://erm.scarletsystems.com:132/Api/Task/GetTaskList?coid=$fkcoid&usid=$userid"));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        allTaskList.value =
+            jsonData.map((e) => GetTaskListModel.fromJson(e)).toList();
+        print("api hit successfully${response.statusCode}");
+      } else {
+        throw Exception("Failed to load data from api");
+      }
+    } catch (e) {
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+  // fetch task assigen to me
+  Future<void> fetchTaskAssignedMe({required fkcoid, required userid}) async {
+    if (fkcoid == null) {
+      print("fkCoid is null, cannot make API call");
+      return;
+    }
+
+    try {
+      final response = await http.get(Uri.parse(
+          "https://erm.scarletsystems.com:132/Api/Task/AssignToMe?coid=$fkcoid&usid=$userid"));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        TaskAssignedMeList.value =
+            jsonData.map((e) => TaskAssignedToMeModel.fromJson(e)).toList();
         print("api hit successfully${response.statusCode}");
       } else {
         throw Exception("Failed to load data from api");
@@ -108,20 +163,20 @@ class AddTaskController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // final userController = Get.find<UserController>();
-        // After inserting the task successfully, schedule a notification for the assigned user
-        // if (assignto != -1) {
-        //   bool isAssignedUserFound = userController.userList.any(
-        //     (user) => user.uSID == assignto,
-        //   );
-        //   if (isAssignedUserFound) {
-        //     await NotificationService().scheduleNotification(
-        //       assignto,
-        //       "New Task Assigned",
-        //       "You have been assigned a new task: $tittle",
-        //     );
-        //   }
-        // }
+        final userController = Get.find<UserController>();
+        //After inserting the task successfully, schedule a notification for the assigned user
+        if (assignto != -1) {
+          bool isAssignedUserFound = userController.userList.any(
+            (user) => user.uSID == assignto,
+          );
+          if (isAssignedUserFound) {
+            await NotificationService().scheduleNotification(
+              assignto,
+              "New Task Assigned",
+              "You have been assigned a new task: $tittle",
+            );
+          }
+        }
         final box = GetStorage();
         fkcoid = box.read("fkCoid");
 

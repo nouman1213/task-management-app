@@ -116,6 +116,7 @@ class TaskTile extends StatelessWidget {
               ],
             ),
             size: 0.8,
+            color: task.color,
           ),
         ),
         const SizedBox(width: 2),
@@ -131,19 +132,21 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           size: 0.15,
+          color: task.color,
         ),
       ],
     );
   }
 
-  Widget _customContainer({required Widget child, required double size}) {
+  Widget _customContainer(
+      {required Widget child, required double size, required Color color}) {
     return Container(
       height: 180,
       width: Get.width * size,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 0),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.2),
+        color: color,
         borderRadius: BorderRadius.circular(16),
       ),
       child: child,

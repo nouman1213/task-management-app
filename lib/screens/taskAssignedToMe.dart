@@ -37,7 +37,8 @@ class _TaskAssignedToMeScreenState extends State<TaskAssignedToMeScreen> {
           backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
+          future:
+              taskController.fetchTaskAssignedMe(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -47,7 +48,7 @@ class _TaskAssignedToMeScreenState extends State<TaskAssignedToMeScreen> {
               );
             } else {
               // Sort allTaskList by start date before building the ListView
-              taskController.allTaskList.sort((task1, task2) {
+              taskController.TaskAssignedMeList.sort((task1, task2) {
                 DateTime startdate1 = DateTime.parse(task1.sTDT.toString());
                 DateTime startdate2 = DateTime.parse(task2.sTDT.toString());
                 return startdate1.compareTo(startdate2);
@@ -56,18 +57,40 @@ class _TaskAssignedToMeScreenState extends State<TaskAssignedToMeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    taskController.allTaskList.isNotEmpty
+                    taskController.TaskAssignedMeList.isNotEmpty
                         ? Expanded(
                             child: ListView.builder(
-                              itemCount: taskController.allTaskList.length,
+                              itemCount:
+                                  taskController.TaskAssignedMeList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                var task = taskController.allTaskList[index];
+                                var task =
+                                    taskController.TaskAssignedMeList[index];
                                 // Parse the date strings
                                 DateTime startDate =
                                     DateTime.parse(task.sTDT.toString());
                                 DateTime endDate =
                                     DateTime.parse(task.eNDT.toString());
+                                DateTime currentDate = DateTime.now();
 
+                                // Check if the task's end date is greater than the current date
+                                bool isTaskOverdue =
+                                    endDate.isBefore(currentDate);
+
+                                // Choose the color based on the task status and overdue status
+                                Color taskColor;
+                                if (isTaskOverdue) {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer;
+                                } else if (task.sTSNAME == "In process") {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer;
+                                } else {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer;
+                                }
                                 return GestureDetector(
                                   onTap: () {
                                     print('taskId:::${task.tASKID}');
@@ -78,7 +101,7 @@ class _TaskAssignedToMeScreenState extends State<TaskAssignedToMeScreen> {
                                         ));
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
+                                    padding: const EdgeInsets.all(4.0),
                                     child: TaskTile(
                                       task: Task(
                                         title: task.tTITLE.toString(),
@@ -90,6 +113,7 @@ class _TaskAssignedToMeScreenState extends State<TaskAssignedToMeScreen> {
                                             "${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
                                         priority: task.pRTNAME ?? 'priority',
                                         status: task.sTSNAME ?? 'status',
+                                        color: taskColor,
                                       ),
                                     ),
                                   ),

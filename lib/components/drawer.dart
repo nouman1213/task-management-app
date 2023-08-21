@@ -43,6 +43,11 @@ class _MyDrawerState extends State<MyDrawer> {
               _box.remove("uspass");
               _box.remove("fkRoll");
               _box.remove("fkCoid");
+              debugPrint('usid removed :${_box.read('usid')} ');
+              debugPrint('loginId removed :${_box.read('loginId')} ');
+              debugPrint('uspass removed :${_box.read('uspass')} ');
+              debugPrint('fkRoll removed :${_box.read('fkRoll')} ');
+              debugPrint('fkCoid removed :${_box.read('fkCoid')} ');
 
               Get.offAll(() => LoginScreen());
               Get.back();
@@ -87,7 +92,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 // currentAccountPicture: Image.network(imageUrl),
                 currentAccountPicture: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.secondaryContainer,
                   // radius: 20,
                   child: Icon(Icons.person),
                 ),

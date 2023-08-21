@@ -35,10 +35,12 @@ class _CompletedScreenState extends State<CompletedScreen> {
     print(" totaskList length${taskController.completedTaskList.length}");
     return Scaffold(
         appBar: AppBar(
-          title: Text('To Do Tasks'),
+          title: Text('Completed Tasks'),
+          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
+          future:
+              taskController.fetchFilterdTaskList(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -54,7 +56,7 @@ class _CompletedScreenState extends State<CompletedScreen> {
                 return startdate1.compareTo(startdate2);
               });
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Column(
                   children: [
                     taskController.completedTaskList.isNotEmpty
@@ -84,6 +86,9 @@ class _CompletedScreenState extends State<CompletedScreen> {
                                     padding: const EdgeInsets.all(6.0),
                                     child: TaskTile(
                                       task: Task(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .errorContainer,
                                         title: task.tTITLE.toString(),
                                         assignedTo: task.lOGINID.toString(),
                                         details: task.tDTL.toString(),

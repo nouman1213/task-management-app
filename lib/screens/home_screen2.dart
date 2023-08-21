@@ -38,6 +38,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
   @override
   Widget build(BuildContext context) {
     Get.put(UserController());
+    taskController.fetchTaskAssignedMe(fkcoid: fkcoid, userid: usid);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -46,9 +47,13 @@ class _HomeScreen2State extends State<HomeScreen2> {
       //   elevation: 0,
       //   backgroundColor: Colors.transparent,
       // ),
-      body: FutureBuilder(
-        future: taskController.fetchAllTaskList(
-            fkcoid: fkcoid, userid: usid), // Initialize AddTaskController
+      body: FutureBuilder<void>(
+        future: Future.wait([
+          taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
+          taskController.fetchTaskAssignedMe(fkcoid: fkcoid, userid: usid),
+          taskController.fetchFilterdTaskList(fkcoid: fkcoid, userid: usid),
+        ]),
+        // Initialize AddTaskController
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -80,12 +85,12 @@ class _HomeScreen2State extends State<HomeScreen2> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'User',
+                              'Projects',
                               style: kTextStyleBoldBlack(context, 24.0),
                             ),
                             Text(
-                              'Project Manger',
-                              style: kTextStyleBlack(context, 16.0),
+                              ' Management',
+                              style: kTextStyleBoldBlack(context, 16.0),
                             ),
                           ],
                         ),
@@ -139,9 +144,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             height: 150,
                             width: 150,
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .tertiaryContainer,
+                                color: Theme.of(context).colorScheme.tertiary,
                                 borderRadius: BorderRadius.circular(12.0)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -167,9 +170,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             height: 150,
                             width: 150,
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .errorContainer,
+                                color: Theme.of(context).colorScheme.error,
                                 borderRadius: BorderRadius.circular(12.0)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -177,7 +178,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      '${taskController.allTaskList.length} Task',
+                                      '${taskController.TaskAssignedMeList.length} Task',
                                       style: kTextStyleWhite(context, 16)),
                                   Text('Assign To Me',
                                       style: kTextStyleWhite(context, 22)),
@@ -206,7 +207,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.assessment,
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onSecondary,
                         ),
                       ),
                       titleText: 'Todo Task',
@@ -226,7 +227,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.incomplete_circle,
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onSecondary,
                         ),
                       ),
                       titleText: 'In Process Task',
@@ -246,7 +247,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             Theme.of(context).colorScheme.surfaceTint,
                         child: Icon(
                           Icons.done,
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onSecondary,
                         ),
                       ),
                       titleText: 'Completed Task',

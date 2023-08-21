@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Task {
   final String title;
   final String details;
@@ -8,6 +10,7 @@ class Task {
   final String? assignedBy;
   final String? department;
   final String status;
+  Color color;
 
   Task(
       {required this.title,
@@ -18,5 +21,7 @@ class Task {
       required this.assignedTo,
       required this.status,
       this.department,
-      this.assignedBy});
+      this.assignedBy,
+      Color? color})
+      : color = color ?? Colors.blue.shade100;
 }

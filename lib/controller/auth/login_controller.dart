@@ -47,6 +47,12 @@ class loginController extends GetxController {
         _box.write('fkRoll', jsonData['FKROLE']);
         _box.write('fkCoid', jsonData['FKCOID']);
 
+        debugPrint('usid: ${jsonData['USID']}');
+        debugPrint('loginId: ${jsonData['LOGINID']}');
+        debugPrint('uspass: ${jsonData['USPW']}');
+        debugPrint('fkRoll: ${jsonData['FKROLE']}');
+        debugPrint('fkCoid: ${jsonData['FKCOID']}');
+
         print('Response: ${response.body}');
         loading.value = false;
         clearControllers();

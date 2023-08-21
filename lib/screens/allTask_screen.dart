@@ -51,7 +51,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                 return startdate1.compareTo(startdate2);
               });
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Column(
                   children: [
                     taskController.allTaskList.isNotEmpty
@@ -65,6 +65,27 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                                     DateTime.parse(task.sTDT.toString());
                                 DateTime endDate =
                                     DateTime.parse(task.eNDT.toString());
+                                DateTime currentDate = DateTime.now();
+
+                                // Check if the task's end date is greater than the current date
+                                bool isTaskOverdue =
+                                    endDate.isBefore(currentDate);
+
+                                // Choose the color based on the task status and overdue status
+                                Color taskColor;
+                                if (isTaskOverdue) {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer;
+                                } else if (task.sTSNAME == "In process") {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer;
+                                } else {
+                                  taskColor = Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer;
+                                }
 
                                 return GestureDetector(
                                   onTap: () {
@@ -79,18 +100,18 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                                     padding: const EdgeInsets.all(6.0),
                                     child: TaskTile(
                                       task: Task(
-                                        department: task.dEPARTMENT,
-                                        assignedBy: task.assignBy.toString(),
-                                        title: task.tTITLE.toString(),
-                                        assignedTo: task.lOGINID.toString(),
-                                        details: task.tDTL.toString(),
-                                        startDate:
-                                            "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
-                                        endDate:
-                                            "${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
-                                        priority: task.pRTNAME ?? 'priority',
-                                        status: task.sTSNAME ?? 'status',
-                                      ),
+                                          department: task.dEPARTMENT,
+                                          assignedBy: task.assignBy.toString(),
+                                          title: task.tTITLE.toString(),
+                                          assignedTo: task.lOGINID.toString(),
+                                          details: task.tDTL.toString(),
+                                          startDate:
+                                              "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
+                                          endDate:
+                                              "${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+                                          priority: task.pRTNAME ?? 'priority',
+                                          status: task.sTSNAME ?? 'status',
+                                          color: taskColor),
                                     ),
                                   ),
                                 );

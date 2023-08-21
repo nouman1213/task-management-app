@@ -35,10 +35,12 @@ class _InProgressScreenState extends State<InProgressScreen> {
     print(" totaskList length${taskController.inProcessTaskList.length}");
     return Scaffold(
         appBar: AppBar(
-          title: Text('To Do Tasks'),
+          title: Text('In Process Tasks'),
+          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
+          future:
+              taskController.fetchFilterdTaskList(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -54,7 +56,7 @@ class _InProgressScreenState extends State<InProgressScreen> {
                 return startdate1.compareTo(startdate2);
               });
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Column(
                   children: [
                     taskController.inProcessTaskList.isNotEmpty
@@ -84,6 +86,9 @@ class _InProgressScreenState extends State<InProgressScreen> {
                                     padding: const EdgeInsets.all(6.0),
                                     child: TaskTile(
                                       task: Task(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiaryContainer,
                                         title: task.tTITLE.toString(),
                                         assignedTo: task.lOGINID.toString(),
                                         details: task.tDTL.toString(),

@@ -36,7 +36,7 @@ class MainScreen extends StatelessWidget {
               showUnselectedLabels: true,
               currentIndex: controller.selectedTab.value,
               onTap: (index) => controller.changeTab(index),
-              selectedItemColor: Colors.blue.shade900,
+              selectedItemColor: Theme.of(context).colorScheme.inverseSurface,
               unselectedItemColor: Colors.grey,
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),

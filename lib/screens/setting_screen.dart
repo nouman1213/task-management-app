@@ -50,19 +50,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 value: theme == ThemeMode.dark,
                 onChanged: (v) => switchTheme()),
-            ListTile(
-                title: Text('Reminder'),
-                trailing: Switch(
-                  value: isReminderEnabled,
-                  onChanged: (value) {
-                    setState(() {
-                      isReminderEnabled = value;
-                    });
-                  },
-                )),
+            // ListTile(
+            //     title: Text('Reminder'),
+            //     trailing: Switch(
+            //       value: isReminderEnabled,
+            //       onChanged: (value) {
+            //         setState(() {
+            //           isReminderEnabled = value;
+            //         });
+            //       },
+            //     )),
             // SizedBox(height: 1.h),
-            ListTile(
-                title: Text('Reminder me  before'), trailing: Text('15 mins')),
+            // ListTile(
+            //     title: Text('Reminder me  before'), trailing: Text('15 mins')),
             // ElevatedButton(
             //     onPressed: () {
             //       NotificationService().simpleNotificationShow();

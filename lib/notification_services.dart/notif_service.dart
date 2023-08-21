@@ -24,9 +24,12 @@ class NotificationService {
   }
 
   Future<void> scheduleNotification(
-      int userId, String title, String body) async {
+    int userId,
+    String title,
+    String body,
+  ) async {
     print("Scheduling notification for user $userId: $title - $body");
-    const int notificationId = 0; // Assign a unique notification ID
+    // const int notificationId = 0; // Assign a unique notification ID
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -44,7 +47,7 @@ class NotificationService {
 
     // Schedule the notification
     await notificationsPlugin.show(
-      notificationId,
+      userId,
       title,
       body,
       platformChannelSpecifics,

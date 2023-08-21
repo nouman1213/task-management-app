@@ -31,10 +31,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
     print(" totaskList length${taskController.todoTaskList.length}");
     return Scaffold(
         appBar: AppBar(
-          title: Text('To Do Tasks'),
+          title: Text('Todo Tasks'),
+          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         ),
         body: FutureBuilder(
-          future: taskController.fetchAllTaskList(fkcoid: fkcoid, userid: usid),
+          future:
+              taskController.fetchFilterdTaskList(fkcoid: fkcoid, userid: usid),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -50,7 +52,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 return startdate1.compareTo(startdate2);
               });
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Column(
                   children: [
                     taskController.todoTaskList.isNotEmpty
@@ -78,16 +80,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                     padding: const EdgeInsets.all(6.0),
                                     child: TaskTile(
                                       task: Task(
-                                        title: task.tTITLE.toString(),
-                                        assignedTo: task.lOGINID.toString(),
-                                        details: task.tDTL.toString(),
-                                        startDate:
-                                            "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
-                                        endDate:
-                                            "${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
-                                        priority: task.pRTNAME ?? 'priority',
-                                        status: task.sTSNAME ?? 'status',
-                                      ),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          title: task.tTITLE.toString(),
+                                          assignedTo: task.lOGINID.toString(),
+                                          details: task.tDTL.toString(),
+                                          startDate:
+                                              "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
+                                          endDate:
+                                              "${endDate.year}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+                                          priority: task.pRTNAME ?? 'priority',
+                                          status: task.sTSNAME ?? 'status',
+                                          assignedBy: task.assignBy),
                                     ),
                                   ),
                                 );

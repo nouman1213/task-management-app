@@ -78,7 +78,7 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
                 if (tasks.isEmpty) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -90,7 +90,7 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -99,7 +99,7 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
 
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
@@ -119,7 +119,11 @@ class _TodayTaskScreenState extends State<TodayTaskScreen> {
                               ));
                         },
                         child: Card(
+                          elevation: 2,
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
                           child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 6),
                             title: Text(task.tTITLE!),
                             trailing: Text(formatDate(task.sTDT ?? "")),
                           ),

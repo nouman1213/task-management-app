@@ -161,6 +161,8 @@ class UserListScreen extends StatelessWidget {
                       backgroundColor: Colors.green.shade500,
                       title: "Add New User",
                       onTap: () {
+                        userController.userPassController.clear();
+
                         _showAddUserDialog(context);
                       })
                 ],
@@ -265,6 +267,7 @@ class UserListScreen extends StatelessWidget {
                     userController.fetchUserList();
                     userController.isInsertingUser.value = false;
                     nameController.clear();
+                    userController.userPassController.clear();
 
                     Navigator.of(context).pop();
                   }
